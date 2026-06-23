@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro y Camino de Logros Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .screen {
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- PANTALLA DE REGISTRO --- */
+        #login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('fondo.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+        }
+
+        .login-card .logo-circular {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1.2rem;
+            display: block;
+            border: 3px solid #3498db;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .login-card h2 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .login-card p {
+            color: #7f8c8d;
+            margin-bottom: 1.2rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .login-card input, .admin-box input, .admin-box textarea, .admin-box select {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 0.3rem;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .login-card input:focus, .admin-box input:focus, .admin-box textarea:focus, .admin-box select:focus {
+            border-color: #3498db;
+        }
+
+        .input-help {
+            color: #95a5a6;
+            font-size: 0.75rem;
+            text-align: left;
+            display: block;
+            margin-bottom: 0.6rem;
+            padding-left: 4px;
+        }
+
+        /* Contenedor contraseña */
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-container input {
+            padding-right: 45px;
+            margin-bottom: 0.3rem;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 38%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+        }
+
+        .toggle-password:focus { outline: none; }
+        .toggle-password svg { width: 22px; height: 22px; transition: color 0.3s; }
+        .toggle-password:hover svg { color: #3498db; }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            text-align: left;
+            display: block;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            min-height: 18px;
+        }
+
+        .btn-green {
+            width: 100%;
+            padding: 14px;
+            background: #2ecc71;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 0.5rem;
+        }
+        .btn-green:hover { background: #27ae60; }
+
+        /* --- PANTALLA ADMINISTRADOR --- */
+        #admin-screen {
+            background-color: #2c3e50;
+            color: #fff;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .admin-container {
+            max-width: 900px;
+            width: 100%;
+            background: #fff;
+            color: #333;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .admin-layout { grid-template-columns: 1.3fr 0.7fr; }
+        }
+
+        .admin-box {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid #3498db;
+        }
+
+        .admin-box.users-box { border-left-color: #e67e22; }
+        .admin-box h3 { margin-bottom: 1rem; color: #2c3e50; }
+        
+        .admin-info-card {
+            background: #e8f4f8;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border: 1px dashed #3498db;
+        }
+
+        .admin-mission-row {
+            background: #fff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border: 1px solid #dcdde1;
+            position: relative;
+        }
+        .admin-mission-row h4 { color: #2c3e50; margin-bottom: 8px; padding-right: 120px; }
+        .admin-mission-row label { font-size: 0.8rem; font-weight: bold; display: block; margin-top: 6px; margin-bottom: 2px; color: #555; }
+        .admin-mission-row input, .admin-mission-row textarea, .admin-mission-row select { padding: 8px; font-size: 0.9rem; margin-bottom: 6px; border: 1px solid #ccc; border-radius: 4px; width: 100%; }
+
+        .btn-blue {
+            background: #3498db;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+        .btn-blue:hover { background: #2980b9; }
+
+        .btn-red {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-red:hover { background: #c0392b; }
+
+        .btn-delete-mission {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            font-size: 0.75rem;
+        }
+
+        .btn-logout {
+            background: transparent;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+            margin-top: 1rem;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+        .btn-logout:hover { background: #e74c3c; color: white; }
+
+        /* --- PANTALLA DEL CAMINO DE LOGROS --- */
+        #roadmap-screen {
+            background-color: #f5f6fa;
+            position: relative;
+            overflow-x: hidden;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4rem 2rem;
+        }
+
+        .floating-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden; pointer-events: none; z-index: 1;
+        }
+
+        .floating-element {
+            position: absolute; background-size: contain; background-repeat: no-repeat;
+            top: -100px; opacity: 0.65; filter: saturate(1.6) drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+            animation: lluviaInfinita linear infinite;
+        }
+
+        @keyframes lluviaInfinita {
+            0% { transform: translateY(0vh) translateX(0) rotate(0deg); }
+            100% { transform: translateY(115vh) translateX(120px) rotate(360deg); }
+        }
+
+        #roadmap-screen h1, .score-board, .roadmap, .btn-logout-roadmap { position: relative; z-index: 2; }
+        #roadmap-screen h1 { margin-bottom: 1rem; color: #2c3e50; font-size: 2.5rem; text-align: center; }
+
+        .score-board {
+            background: #F9E9A9; padding: 0.6rem 2rem; border-radius: 50px;
+            font-size: 1.3rem; font-weight: bold; color: #2c3e50;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); border: 2px solid #f1c40f;
+            margin-bottom: 3rem;
+        }
+        .score-board span { color: #e67e22; }
+
+        /* --- MEJORA: LOGROS A LA PAR DE LAS CURVAS --- */
+        .roadmap {
+            max-width: 900px; 
+            width: 100%; 
+            padding: 3rem 0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Línea de fondo curvada */
+        .roadmap::before {
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            bottom: 0; 
+            left: 0; 
+            right: 0;
+            width: 100%; 
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' preserveAspectRatio='none'%3E%3Cpath d='M 400,0 Q 150,150 400,300 T 400,600' fill='none' stroke='%233498db' stroke-width='6' stroke-dasharray='10 10'/%3E%3C/svg%3E");
+            background-size: 100% 600px; 
+            background-repeat: repeat-y; 
+            z-index: 0; 
+            opacity: 0.8;
+        }
+
+        /* Contenedor de cada ítem ocupa todo el ancho y distribuye a la par de la curva */
+        .achievement-item { 
+            position: relative; 
+            width: 100%; 
+            margin-bottom: 3rem; 
+            z-index: 1; 
+            display: flex;
+        }
+
+        /* A la par izquierda de la curva central */
+        .achievement-item.left { 
+            justify-content: flex-start;
+            padding-left: 6%;
+        }
+
+        /* A la par derecha de la curva central */
+        .achievement-item.right { 
+            justify-content: flex-end;
+            padding-right: 6%;
+        }
+
+        /* Forzamos un tamaño fijo equilibrado a los lados de la curva central */
+        .achievement-card {
+            background: #F9B4DA; 
+            padding: 1.5rem; 
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15); 
+            transition: transform 0.3s ease; 
+            width: 290px; 
+            word-wrap: break-word;
+        }
+
+        .achievement-card:hover { transform: scale(1.05); }
+        .date { font-size: 0.85rem; color: #fff; font-weight: bold; margin-bottom: 0.5rem; display: block; opacity: 0.9; }
+        .achievement-card h3 { color: #fff; margin-bottom: 0.5rem; font-size: 1.2rem; }
+        .achievement-card p { font-size: 0.9rem; color: #ffe3e3; line-height: 1.4; margin-bottom: 0.8rem; }
+        
+        .points-badge { display: inline-block; background: #2ecc71; color: white; padding: 0.2rem 0.6rem; font-size: 0.8rem; font-weight: bold; border-radius: 4px; }
+        
+        .achievement-item.not-completed .achievement-card { background: #b2bec3; }
+        .achievement-item.not-completed .points-badge { background: #7f8c8d; color: #fff; }
+        .achievement-item.not-completed .achievement-card p { color: #dfdfdf; }
+
+        /* Tarjeta final con el número de cliente */
+        .client-badge-card {
+            background: #2c3e50 !important;
+            border: 3px solid #34495e;
+        }
+        .client-badge-card h3, 
+        .client-badge-card p, 
+        .client-badge-card .date,
+        .client-badge-card span { 
+            color: #ffffff !important; 
+        }
+        .client-badge-card p { 
+            font-weight: bold; 
+            opacity: 0.95;
+        }
+
+        /* Diseño responsivo para pantallas móviles pequeñas */
+        @media (max-width: 768px) {
+            .roadmap::before { 
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 600' preserveAspectRatio='none'%3E%3Cpath d='M 20,0 Q 40,150 20,300 T 20,600' fill='none' stroke='%233498db' stroke-width='4' stroke-dasharray='5 5'/%3E%3C/svg%3E");
+                left: 20px; right: auto; width: 40px;
+            }
+            .achievement-item { width: 100% !important; left: 0 !important; padding-left: 60px !important; padding-right: 0 !important; justify-content: flex-start !important; }
+            .achievement-card { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen" class="screen">
+        <div class="login-card">
+            <img src="helados.png" alt="Logo" class="logo-circular">
+            <h2>¡Bienvenido!</h2>
+            <p>Ingresa tus datos para ver tu progreso en el camino de logros.</p>
+            
+            <form id="login-form">
+                <input type="text" id="username-input" placeholder="Nombre y Apellido reales" pattern="[A-Za-zÁéíóúÁÉÍÓÚñÑ\s]+" minlength="3" title="Escribe solo letras y espacios" required>
+                <span class="input-help">Usa solo letras y espacios (Mínimo 3 letras)</span>
+
+                <input type="tel" id="phone-input" placeholder="Número de Teléfono (solo para clientes nuevos)" pattern="\d{7,15}" title="Escribe entre 7 y 15 números">
+                <span class="input-help">Introduce tu teléfono (ej: sólo números sin espacios)</span>
+
+                <div class="password-container">
+                    <input type="password" id="password-input" placeholder="Contraseña (mínimo 8 caracteres)" minlength="8" required>
+                    <button type="button" id="toggle-password-btn" class="toggle-password" title="Mostrar/Ocultar contraseña">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" id="eye-icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                    </button>
+                </div>
+                <span class="input-help">Debe contener 8 o más caracteres</span>
+
+                <span id="error-box" class="error-message"></span>
+                <button type="submit" class="btn-green">Ingresar</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="admin-screen" class="screen hidden">
+        <h1 style="margin-bottom: 1.5rem; text-align: center;">🛠️ Panel de Control Administrador</h1>
+        <div class="admin-container">
+            <div class="admin-layout">
+                
+                <div>
+                    <div class="admin-box">
+                        <h3>🎯 Evaluar y Editar Metas</h3>
+                        <label style="font-size:0.85rem; font-weight:bold; display:block; margin-bottom:5px;">Selecciona un usuario:</label>
+                        <select id="admin-user-selector" onchange="cargarMisionesUsuarioSeleccionado()"></select>
+                        
+                        <form id="admin-form" style="margin-top: 1.5rem;">
+                            <div id="admin-missions-inputs">
+                                <p style="color:#7f8c8d; font-style:italic;">Selecciona un usuario para calificar, editar textos o gestionarlo.</p>
+                            </div>
+                            <button type="submit" id="btn-save-admin" class="btn-blue hidden">💾 Guardar Cambios y Puntos</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div>
+                    <div id="admin-creation-box" class="admin-box users-box hidden">
+                        <h3>✨ Crear Nueva Misión / Logro</h3>
+                        <p style="font-size: 0.85rem; color:#666; margin-bottom: 10px;">Agrega una meta personalizada ilimitada al usuario seleccionado actual.</p>
+                        
+                        <label style="font-size:0.8rem; font-weight:bold;">Título del nuevo logro:</label>
+                        <input type="text" id="new-mission-title" placeholder="Ej: Compra de Oro">
+                        
+                        <label style="font-size:0.8rem; font-weight:bold;">Descripción:</label>
+                        <textarea id="new-mission-desc" rows="2" placeholder="Ej: Completó 5 pedidos en el mes..."></textarea>
+                        
+                        <label style="font-size:0.8rem; font-weight:bold;">Puntos iniciales:</label>
+                        <input type="number" id="new-mission-points" value="50" min="0">
+                        
+                        <button type="button" class="btn-blue" style="background:#2ecc71; margin-top:5px;" onclick="agregarNuevaMisionAdmin()">➕ Agregar esta meta</button>
+                    </div>
+
+                    <div class="admin-box users-box">
+                        <h3>👥 Información del Sistema</h3>
+                        <p style="font-size: 0.95rem; color:#333;">Las tarjetas se mantendrán perfectamente distribuidas a los costados de la línea curva de manera alterna.</p>
+                    </div>
+                    <button class="btn-logout" onclick="cerrarSesionAdmin()">Volver al Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="roadmap-screen" class="screen hidden">
+        <div class="floating-container" id="lluvia-contenedor"></div>
+
+        <h1 id="user-welcome">Mi Camino de Éxitos</h1>
+        <div class="score-board">
+            🏆 Puntos Obtenidos: <span id="total-score">0</span> PTS
+        </div>
+
+        <div class="roadmap" id="roadmap-container"></div>
+        <button class="btn-logout btn-logout-roadmap" onclick="location.reload()" style="max-width:200px; margin-top: 2rem; margin-left:auto; margin-right:auto; display:block;">Cerrar Sesión</button>
+    </div>
+
+    <script type="module">
+        
+        
+        const ADMIN_USER = "admin";
+        const ADMIN_PASS = "12345678"; 
+
+        const palabrasProhibidas = ["tonto", "bobo", "estupido", "mierda", "pendejo", "puto", "perra"];
+
+        const misionesPlantilla = [
+            { id: Date.now() + 1, posicion: 'left', tag: 'Misión 1', titulo: 'Registro Exitoso', desc: 'Has configurado tu cuenta y asegurado tu acceso al mapa de misiones.', puntos: 10, cumplida: true },
+            { id: Date.now() + 2, posicion: 'right', tag: 'Misión 2', titulo: 'El Inicio del Viaje', desc: 'Tomé la decisión de aprender una nueva habilidad y creé mi primer "Hola Mundo".', puntos: 30, cumplida: false },
+            { id: Date.now() + 3, posicion: 'left', tag: 'Misión 3', titulo: 'Primer Proyecto', desc: 'Diseñé y programé mi primera página web completa desde cero usando HTML y CSS.', puntos: 50, cumplida: false },
+            { id: Date.now() + 4, posicion: 'right', tag: 'Misión 4', titulo: 'Certificación Oficial', desc: 'Aprobé con éxito el curso avanzado y obtuve mi diploma de especialización.', puntos: 100, cumplida: false },
+            { id: Date.now() + 5, posicion: 'left', tag: 'Meta Final', titulo: 'Próxima Meta Grande', desc: 'Dominar tecnologías de backend y lanzar una aplicación web funcional.', puntos: 200, cumplida: false }
+        ];
+
+        let DB_USUARIOS = JSON.parse(localStorage.getItem('db_usuarios_misiones')) || {};
+        let CLIENT_COUNTER = parseInt(localStorage.getItem('db_client_counter')) || 0;
+
+        const loginForm = document.getElementById('login-form');
+        const usernameInput = document.getElementById('username-input');
+        const phoneInput = document.getElementById('phone-input');
+        const passwordInput = document.getElementById('password-input');
+        const errorBox = document.getElementById('error-box');
+        const togglePasswordBtn = document.getElementById('toggle-password-btn');
+        const eyeIcon = document.getElementById('eye-icon');
+        const userSelector = document.getElementById('admin-user-selector');
+        const missionsInputsContainer = document.getElementById('admin-missions-inputs');
+        const btnSaveAdmin = document.getElementById('btn-save-admin');
+        const adminCreationBox = document.getElementById('admin-creation-box');
+
+        usernameInput.addEventListener('input', function() {
+            this.value = this.value.replace(/[^A-Za-zÁéíóúÁÉÍÓÚñÑ\s]/g, '');
+            errorBox.innerText = ""; 
+        });
+        phoneInput.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, ''); 
+            errorBox.innerText = ""; 
+        });
+
+        togglePasswordBtn.addEventListener('click', function() {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.815 7.815 3 3m-3-3-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />`;
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />`;
+            }
+        });
+
+        loginForm.addEventListener('submit', function(evento) {
+            evento.preventDefault();
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            const phone = phoneInput.value.trim();
+            errorBox.innerText = "";
+
+            if (username === ADMIN_USER && password === ADMIN_PASS) {
+                DB_USUARIOS = JSON.parse(localStorage.getItem('db_usuarios_misiones')) || {};
+                poblarSelectorUsuariosAdmin();
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('admin-screen').classList.remove('hidden');
+                return;
+            }
+
+            const userLower = username.toLowerCase();
+            const passLower = password.toLowerCase();
+            if (palabrasProhibidas.some(p => userLower.includes(p)) || palabrasProhibidas.some(p => passLower.includes(p))) {
+                errorBox.innerText = "❌ Se detectó lenguaje inapropiado.";
+                return;
+            }
+
+            const userKey = username;
+
+            if (DB_USUARIOS[userKey]) {
+                if (DB_USUARIOS[userKey].contrasena !== password) {
+                    errorBox.innerText = "❌ Contraseña incorrecta para este usuario.";
+                    return;
+                }
+            } else {
+                if(phone.length < 7) {
+                    errorBox.innerText = "❌ Para registrarte como cliente nuevo, introduce tu número de teléfono.";
+                    return;
+                }
+
+                let telefonoDuplicado = Object.values(DB_USUARIOS).some(u => u.telefono === phone);
+                if (telefonoDuplicado) {
+                    errorBox.innerText = "❌ Este número de teléfono ya está registrado por otro usuario.";
+                    return;
+                }
+
+                CLIENT_COUNTER++;
+                localStorage.setItem('db_client_counter', CLIENT_COUNTER);
+
+                DB_USUARIOS[userKey] = {
+                    numeroCliente: CLIENT_COUNTER,
+                    telefono: phone,
+                    contrasena: password, 
+                    misiones: JSON.parse(JSON.stringify(misionesPlantilla))
+                };
+                localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS));
+            }
+
+            document.getElementById('user-welcome').innerText = `¡Bienvenido, ${username}! ✨`;
+            generarMapaUsuario(userKey);
+            iniciarLluviaDosImagenes(); 
+
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('roadmap-screen').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        });
+
+        function iniciarLluviaDosImagenes() {
+            const contenedor = document.getElementById('lluvia-contenedor');
+            contenedor.innerHTML = ""; 
+            const imagenesDisponibles = ['señor.png', 'helados.png'];
+            for (let i = 0; i < 14; i++) {
+                const elemento = document.createElement('div');
+                elemento.className = 'floating-element';
+                elemento.style.backgroundImage = `url('${imagenesDisponibles[Math.floor(Math.random() * 2)]}')`;
+                elemento.style.left = `${Math.random() * 95}%`;
+                const tamano = Math.floor(Math.random() * 40) + 45;
+                elemento.style.width = `${tamano}px`; elemento.style.height = `${tamano}px`;
+                elemento.style.animationDuration = `${Math.floor(Math.random() * 13) + 15}s`;
+                elemento.style.animationDelay = `${Math.floor(Math.random() * 12)}s`;
+                contenedor.appendChild(elemento);
+            }
+        }
+
+        function generarMapaUsuario(userKey) {
+            const container = document.getElementById('roadmap-container');
+            container.innerHTML = "";
+            let totalPuntos = 0;
+            
+            const datosUsuario = DB_USUARIOS[userKey];
+            const misionesUsuario = datosUsuario.misiones;
+            const numCliente = datosUsuario.numeroCliente;
+
+            misionesUsuario.forEach(m => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `achievement-item ${m.posicion} ${m.cumplida ? '' : 'not-completed'}`;
+                itemDiv.innerHTML = `
+                    <div class="achievement-card">
+                        <span class="date">${m.tag}</span>
+                        <h3>${m.titulo}</h3>
+                        <p>${m.desc}</p>
+                        <span class="points-badge">${m.cumplida ? '✅ Cumplida (+' + m.puntos + ' pts)' : '⏳ No cumplida (0 pts)'}</span>
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+                if (m.cumplida) totalPuntos += parseInt(m.puntos);
+            });
+
+            // TARJETA DE AGRADECIMIENTO AL FINAL (FIJA A LA DERECHA)
+            const finalDiv = document.createElement('div');
+            finalDiv.className = `achievement-item right`;
+            finalDiv.innerHTML = `
+                <div class="achievement-card client-badge-card">
+                    <span class="date">🎉 ¡Eres Especial!</span>
+                    <h3>Miembro Oficial</h3>
+                    <p>Eres nuestro Cliente Especial #${numCliente}</p>
+                    <span class="points-badge" style="background:#e74c3c; border: 1px solid #fff;">¡Gracias por tu preferencia!</span>
+                </div>
+            `;
+            container.appendChild(finalDiv);
+
+            document.getElementById('total-score').innerText = totalPuntos;
+        }
+
+        // --- PANEL DE CONTROL ---
+
+        function poblarSelectorUsuariosAdmin() {
+            userSelector.innerHTML = '<option value="">-- Selecciona un Cliente por Número o Nombre --</option>';
+            const llavesUsuarios = Object.keys(DB_USUARIOS);
+            
+            if (llavesUsuarios.length === 0) {
+                missionsInputsContainer.innerHTML = '<p style="color:#7f8c8d; font-style:italic;">No hay usuarios registrados en el sistema todavía.</p>';
+                btnSaveAdmin.classList.add('hidden');
+                adminCreationBox.classList.add('hidden');
+                return;
+            }
+
+            llavesUsuarios.sort((a, b) => DB_USUARIOS[a].numeroCliente - DB_USUARIOS[b].numeroCliente);
+
+            llavesUsuarios.forEach(key => {
+                const numCliente = DB_USUARIOS[key].numeroCliente;
+                const opt = document.createElement('option');
+                opt.value = key; 
+                opt.innerText = `[Cliente #${numCliente}] ${key}`; 
+                userSelector.appendChild(opt);
+            });
+        }
+
+        function cargarMisionesUsuarioSeleccionado() {
+            const userKeySeleccionado = userSelector.value;
+            missionsInputsContainer.innerHTML = "";
+
+            if (!userKeySeleccionado) {
+                missionsInputsContainer.innerHTML = '<p style="color:#7f8c8d; font-style:italic;">Selecciona un usuario para calificar sus metas o gestionarlo.</p>';
+                btnSaveAdmin.classList.add('hidden');
+                adminCreationBox.classList.add('hidden');
+                return;
+            }
+
+            btnSaveAdmin.classList.remove('hidden');
+            adminCreationBox.classList.remove('hidden');
+            
+            const datosUsuario = DB_USUARIOS[userKeySeleccionado];
+            const misionesUsuario = datosUsuario.misiones;
+            const telefonoUsuario = datosUsuario.telefono || "No registrado";
+            const numCliente = datosUsuario.numeroCliente;
+
+            const infoCard = document.createElement('div');
+            infoCard.className = 'admin-info-card';
+            infoCard.innerHTML = `
+                <p><strong>👤 Cliente:</strong> ${userKeySeleccionado} (🔢 Identificador Fijo: #${numCliente})</p>
+                <p><strong>📞 Teléfono:</strong> <span style="color:#2980b9; font-weight:bold;">${telefonoUsuario}</span></p>
+                <button type="button" class="btn-red" style="margin-top:8px;" onclick="eliminarCuentaUsuario('${userKeySeleccionado}')">❌ Eliminar Cuenta del Cliente</button>
+            `;
+            missionsInputsContainer.appendChild(infoCard);
+
+            if(misionesUsuario.length === 0) {
+                const aviso = document.createElement('p');
+                aviso.style = "color:#7f8c8d; font-style:italic; padding: 10px;";
+                aviso.innerText = "Este usuario no tiene misiones activas en este momento. ¡Puedes crearle una nueva a la derecha!";
+                missionsInputsContainer.appendChild(aviso);
+                return;
+            }
+
+            misionesUsuario.forEach((m, index) => {
+                const row = document.createElement('div');
+                row.className = 'admin-mission-row';
+                row.innerHTML = `
+                    <h4>🛠️ ${m.tag}</h4>
+                    <button type="button" class="btn-red btn-delete-mission" onclick="eliminarMisionIndividual(${index})">🗑️ Eliminar meta</button>
+                    
+                    <label>Título del Logro:</label>
+                    <input type="text" id="title-${index}" value="${m.titulo}" required>
+                    
+                    <label>Descripción:</label>
+                    <textarea id="desc-${index}" rows="2" required>${m.desc}</textarea>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div>
+                            <label>Puntos:</label>
+                            <input type="number" id="points-${index}" value="${m.puntos}" min="0" required>
+                        </div>
+                        <div>
+                            <label>¿Estado?</label>
+                            <select id="status-${index}">
+                                <option value="true" ${m.cumplida ? 'selected' : ''}>Sí, cumplida</option>
+                                <option value="false" ${!m.cumplida ? 'selected' : ''}>No cumplida</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+                missionsInputsContainer.appendChild(row);
+            });
+        }
+
+        function agregarNuevaMisionAdmin() {
+            const userKeySeleccionado = userSelector.value;
+            if(!userKeySeleccionado) return;
+
+            const titulo = document.getElementById('new-mission-title').value.trim();
+            const desc = document.getElementById('new-mission-desc').value.trim();
+            const puntos = parseInt(document.getElementById('new-mission-points').value) || 0;
+
+            if(!titulo || !desc) {
+                alert("⚠️ Por favor escribe un título y descripción para el nuevo logro.");
+                return;
+            }
+
+            const misionesActuales = DB_USUARIOS[userKeySeleccionado].misiones;
+            const nuevoNumeroMision = misionesActuales.length + 1;
+            const esPar = nuevoNumeroMision % 2 === 0;
+
+            const nuevaMision = {
+                id: Date.now(),
+                posicion: esPar ? 'right' : 'left',
+                tag: `Misión ${nuevoNumeroMision}`,
+                titulo: titulo,
+                desc: desc,
+                puntos: puntos,
+                cumplida: false
+            };
+
+            DB_USUARIOS[userKeySeleccionado].misiones.push(nuevaMision);
+            localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS));
+
+            document.getElementById('new-mission-title').value = "";
+            document.getElementById('new-mission-desc').value = "";
+            document.getElementById('new-mission-points').value = "50";
+
+            alert("✨ ¡Nuevo logro creado y asignado con éxito!");
+            cargarMisionesUsuarioSeleccionado();
+        }
+
+        function eliminarMisionIndividual(index) {
+            const userKeySeleccionado = userSelector.value;
+            if(!userKeySeleccionado) return;
+
+            if(confirm("⚠️ ¿Seguro que deseas eliminar este logro de forma permanente?")) {
+                sincronizarDatosFormulario(userKeySeleccionado);
+                
+                DB_USUARIOS[userKeySeleccionado].misiones.splice(index, 1);
+                
+                DB_USUARIOS[userKeySeleccionado].misiones.forEach((m, idx) => {
+                    if (m.tag.startsWith("Misión")) {
+                        m.tag = `Misión ${idx + 1}`;
+                    }
+                    m.posicion = (idx + 1) % 2 === 0 ? 'right' : 'left';
+                });
+
+                localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS));
+                cargarMisionesUsuarioSeleccionado();
+            }
+        }
+
+        function sincronizarDatosFormulario(userKeySeleccionado) {
+            const misionesUsuario = DB_USUARIOS[userKeySeleccionado].misiones;
+            misionesUsuario.forEach((m, index) => {
+                const tEl = document.getElementById(`title-${index}`);
+                const dEl = document.getElementById(`desc-${index}`);
+                const pEl = document.getElementById(`points-${index}`);
+                const sEl = document.getElementById(`status-${index}`);
+
+                if(tEl && dEl && pEl && sEl) {
+                    m.titulo = tEl.value.trim();
+                    m.desc = dEl.value.trim();
+                    m.puntos = parseInt(pEl.value) || 0;
+                    m.cumplida = (sEl.value === "true");
+                }
+            });
+        }
+
+        function eliminarCuentaUsuario(userKey) {
+            const confirmacion = confirm(`⚠️ ¿Estás completamente seguro de que quieres borrar de forma permanente la cuenta de "${userKey}"?\nEsta acción no se puede deshacer.`);
+            
+            if (confirmacion) {
+                delete DB_USUARIOS[userKey]; 
+                localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS)); 
+                alert(`📋 La cuenta de "${userKey}" ha sido eliminada del sistema.`);
+                
+                poblarSelectorUsuariosAdmin();
+                missionsInputsContainer.innerHTML = '<p style="color:#7f8c8d; font-style:italic;">Selecciona un usuario para calificar sus metas o gestionarlo.</p>';
+                btnSaveAdmin.classList.add('hidden');
+                adminCreationBox.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('admin-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userKeySeleccionado = userSelector.value;
+            if (!userKeySeleccionado) return;
+
+            sincronizarDatosFormulario(userKeySeleccionado);
+            localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS));
+            
+            alert(`¡Los nombres, descripciones, puntajes y estados de "${userKeySeleccionado}" se han guardado con éxito! 🎉`);
+            cerrarSesionAdmin();
+        });
+
+        function cerrarSesionAdmin() {
+            document.getElementById('admin-screen').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+            usernameInput.value = "";
+            phoneInput.value = "";
+            passwordInput.value = "";
+            missionsInputsContainer.innerHTML = '<p style="color:#7f8c8d; font-style:italic;">Selecciona un usuario para calificar sus metas o gestionarlo.</p>';
+            btnSaveAdmin.classList.add('hidden');
+            adminCreationBox.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
