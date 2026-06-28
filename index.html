@@ -1,861 +1,2666 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro y Camino de Logros Pro</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Camino de Logros - Heladería</title>
 
-        .screen {
-            width: 100%;
-            min-height: 100vh;
-        }
+<!-- Fuentes -->
+<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-        .hidden {
-            display: none !important;
-        }
+<style>
+:root {
+    --color-primario: #00B2A9;
+    --color-secundario: #91E2D6;
+    --color-acento-rosa: #F9B4DA;
+    --color-acento-amarillo: #F9E9A9;
+    --color-vino: #63001F;
+    --color-blanco: #FFFFFF;
+    --color-texto: #3b3b3b;
 
-        /* --- PANTALLA DE REGISTRO --- */
-        #login-screen {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url('fondo.jpg'); 
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
+    --shadow-suave: 0 10px 25px rgba(0,0,0,0.16);
+    --radius-base: 12px;
+}
 
-        .login-card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-            text-align: center;
-            max-width: 420px;
-            width: 90%;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        .login-card .logo-circular {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 1.2rem;
-            display: block;
-            border: 3px solid #3498db;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
 
-        .login-card h2 {
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-            font-size: 1.8rem;
-        }
+body {
+    background: radial-gradient(circle at top left, #F9E9A9 0, #FFFFFF 30%, #91E2D6 100%);
+    color: var(--color-texto);
+    overflow-x: hidden;
+}
 
-        .login-card p {
-            color: #7f8c8d;
-            margin-bottom: 1.2rem;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
+/* PANTALLAS */
+.screen {
+    width: 100%;
+    min-height: 100vh;
+    opacity: 1;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
 
-        .login-card input, .admin-box input, .admin-box textarea, .admin-box select {
-            width: 100%;
-            padding: 12px 15px;
-            margin-bottom: 0.3rem;
-            border: 2px solid #ecf0f1;
-            border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
-        }
+.screen.hidden {
+    display: none !important;
+    opacity: 0;
+    visibility: hidden;
+}
 
-        .login-card input:focus, .admin-box input:focus, .admin-box textarea:focus, .admin-box select:focus {
-            border-color: #3498db;
-        }
+.hidden {
+    display: none !important;
+}
 
-        .input-help {
-            color: #95a5a6;
-            font-size: 0.75rem;
-            text-align: left;
-            display: block;
-            margin-bottom: 0.6rem;
-            padding-left: 4px;
-        }
+/* SPLASH */
+#splash-screen {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at top, #F9B4DA 0, #FFFFFF 40%, #91E2D6 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease, visibility 0.8s;
+}
 
-        /* Contenedor contraseña */
-        .password-container {
-            position: relative;
-            width: 100%;
-        }
+.logo-splash {
+    width: clamp(80px, 15vw, 130px);
+    border-radius: 50%;
+    box-shadow: var(--shadow-suave);
+    animation: zoomInFade 2.5s forwards;
+}
 
-        .password-container input {
-            padding-right: 45px;
-            margin-bottom: 0.3rem;
-        }
+@keyframes zoomInFade {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { transform: scale(1.25); opacity: 1; }
+    100% { transform: scale(2.4); opacity: 0; }
+}
 
-        .toggle-password {
-            position: absolute;
-            right: 12px;
-            top: 38%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #7f8c8d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 5px;
-        }
+/* LOGIN */
+#login-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: clamp(1rem, 5vh, 2rem);
+    background: linear-gradient(145deg, #F9E9A9, #FFFFFF 45%, #91E2D6);
+    min-height: 100vh;
+}
 
-        .toggle-password:focus { outline: none; }
-        .toggle-password svg { width: 22px; height: 22px; transition: color 0.3s; }
-        .toggle-password:hover svg { color: #3498db; }
+.login-card {
+    background: rgba(255,255,255,0.95);
+    padding: clamp(1.5rem, 5vw, 2.5rem);
+    border-radius: 20px;
+    box-shadow: var(--shadow-suave);
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    border: 2px solid rgba(145,226,214,0.4);
+    backdrop-filter: blur(10px);
+    animation: slideUpIn 0.6s ease;
+}
 
-        .error-message {
-            color: #e74c3c;
-            font-size: 0.85rem;
-            text-align: left;
-            display: block;
-            margin-bottom: 1rem;
-            font-weight: bold;
-            min-height: 18px;
-        }
+@keyframes slideUpIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-        .btn-green {
-            width: 100%;
-            padding: 14px;
-            background: #2ecc71;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 0.5rem;
-        }
-        .btn-green:hover { background: #27ae60; }
+.logo-circular {
+    width: clamp(70px, 20vw, 96px);
+    height: clamp(70px, 20vw, 96px);
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto clamp(0.8rem, 3vw, 1.2rem);
+    display: block;
+    border: 4px solid var(--color-primario);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+    animation: scaleIn 0.7s ease-out 0.2s backwards;
+}
 
-        /* --- PANTALLA ADMINISTRADOR --- */
-        #admin-screen {
-            background-color: #2c3e50;
-            color: #fff;
-            padding: 3rem 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 
-        .admin-container {
-            max-width: 900px;
-            width: 100%;
-            background: #fff;
-            color: #333;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
+.login-card h2 {
+    font-family: 'Amatic SC', cursive;
+    letter-spacing: 1px;
+    color: var(--color-vino);
+    margin-bottom: 0.3rem;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    animation: slideUpIn 0.6s ease 0.1s backwards;
+}
 
-        .admin-layout {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-        }
+.login-card p {
+    color: #6b7075;
+    margin-bottom: clamp(0.8rem, 2vw, 1.4rem);
+    font-size: clamp(0.85rem, 2vw, 0.98rem);
+    animation: slideUpIn 0.6s ease 0.2s backwards;
+}
 
-        @media (min-width: 768px) {
-            .admin-layout { grid-template-columns: 1.3fr 0.7fr; }
-        }
+/* INPUTS */
+.login-card input,
+.admin-box input,
+.admin-box textarea,
+.admin-box select {
+    width: 100%;
+    padding: clamp(10px, 2vw, 12px) clamp(10px, 2vw, 14px);
+    margin-bottom: 0.5rem;
+    border: 2px solid #E5F2F5;
+    border-radius: 10px;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    outline: none;
+    background: #FDFEFE;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
 
-        .admin-box {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            border-left: 5px solid #3498db;
-        }
+.login-card input:focus,
+.admin-box input:focus,
+.admin-box textarea:focus,
+.admin-box select:focus {
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 3px rgba(0,178,169,0.16);
+}
 
-        .admin-box.users-box { border-left-color: #e67e22; }
-        .admin-box h3 { margin-bottom: 1rem; color: #2c3e50; }
-        
-        .admin-info-card {
-            background: #e8f4f8;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            border: 1px dashed #3498db;
-        }
+.input-help {
+    color: #9aa3aa;
+    font-size: clamp(0.7rem, 1.5vw, 0.78rem);
+    text-align: left;
+    display: block;
+    margin-bottom: 0.6rem;
+    padding-left: 4px;
+}
 
-        .admin-mission-row {
-            background: #fff;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            border: 1px solid #dcdde1;
-            position: relative;
-        }
-        .admin-mission-row h4 { color: #2c3e50; margin-bottom: 8px; padding-right: 120px; }
-        .admin-mission-row label { font-size: 0.8rem; font-weight: bold; display: block; margin-top: 6px; margin-bottom: 2px; color: #555; }
-        .admin-mission-row input, .admin-mission-row textarea, .admin-mission-row select { padding: 8px; font-size: 0.9rem; margin-bottom: 6px; border: 1px solid #ccc; border-radius: 4px; width: 100%; }
+/* PASSWORD */
+.password-container {
+    position: relative;
+}
 
-        .btn-blue {
-            background: #3498db;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 1rem;
-            font-size: 1rem;
-        }
-        .btn-blue:hover { background: #2980b9; }
+.password-container input {
+    padding-right: clamp(60px, 12vw, 82px);
+}
 
-        .btn-red {
-            background: #e74c3c;
-            color: white;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.3s;
-        }
-        .btn-red:hover { background: #c0392b; }
+.toggle-password {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--color-acento-rosa);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: clamp(0.65rem, 1.5vw, 0.74rem);
+    font-weight: 600;
+    color: var(--color-vino);
+    padding: clamp(4px, 1vw, 6px) clamp(6px, 1.5vw, 10px);
+    box-shadow: 0 3px 0 rgba(249,180,218,0.8);
+    transition: all 0.2s ease;
+}
 
-        .btn-delete-mission {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 5px 10px;
-            font-size: 0.75rem;
-        }
+.toggle-password:active {
+    transform: translateY(-50%) scale(0.98);
+}
 
-        .btn-logout {
-            background: transparent;
-            color: #e74c3c;
-            border: 2px solid #e74c3c;
-            margin-top: 1rem;
-            padding: 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-        }
-        .btn-logout:hover { background: #e74c3c; color: white; }
+/* ERRORES */
+.error-message {
+    color: #e74c3c;
+    font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+    text-align: left;
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    min-height: 18px;
+    animation: shake 0.4s ease;
+}
 
-        /* --- PANTALLA DEL CAMINO DE LOGROS --- */
-        #roadmap-screen {
-            background-color: #f5f6fa;
-            position: relative;
-            overflow-x: hidden;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 4rem 2rem;
-        }
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
 
-        .floating-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            overflow: hidden; pointer-events: none; z-index: 1;
-        }
+/* BOTONES */
+.btn-green,
+.btn-blue {
+    width: 100%;
+    padding: clamp(10px, 2vw, 13px);
+    color: var(--color-vino);
+    border: none;
+    border-radius: 999px;
+    font-size: clamp(0.85rem, 2vw, 0.98rem);
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.6rem;
+    background: linear-gradient(135deg, var(--color-acento-amarillo), #ffeaa3);
+    box-shadow: 0 5px 0 rgba(216,197,108,0.85);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
 
-        .floating-element {
-            position: absolute; background-size: contain; background-repeat: no-repeat;
-            top: -100px; opacity: 0.65; filter: saturate(1.6) drop-shadow(0 4px 8px rgba(0,0,0,0.15));
-            animation: lluviaInfinita linear infinite;
-        }
+.btn-green:hover,
+.btn-blue:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 0 rgba(216,197,108,0.9);
+    background: linear-gradient(135deg, #ffeaa3, var(--color-acento-amarillo));
+}
 
-        @keyframes lluviaInfinita {
-            0% { transform: translateY(0vh) translateX(0) rotate(0deg); }
-            100% { transform: translateY(115vh) translateX(120px) rotate(360deg); }
-        }
+.btn-green:active,
+.btn-blue:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 0 rgba(216,197,108,0.9);
+}
 
-        #roadmap-screen h1, .score-board, .roadmap, .btn-logout-roadmap { position: relative; z-index: 2; }
-        #roadmap-screen h1 { margin-bottom: 1rem; color: #2c3e50; font-size: 2.5rem; text-align: center; }
+.btn-red {
+    background: #e74c3c;
+    color: var(--color-blanco);
+    padding: clamp(6px, 1.5vw, 8px) clamp(8px, 2vw, 12px);
+    border: none;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: clamp(0.75rem, 1.5vw, 0.86rem);
+    box-shadow: 0 3px 0 rgba(192,57,43,0.9);
+    transition: all 0.2s ease;
+    margin: 5px 2px;
+}
 
-        .score-board {
-            background: #F9E9A9; padding: 0.6rem 2rem; border-radius: 50px;
-            font-size: 1.3rem; font-weight: bold; color: #2c3e50;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15); border: 2px solid #f1c40f;
-            margin-bottom: 3rem;
-        }
-        .score-board span { color: #e67e22; }
+.btn-red:hover {
+    transform: translateY(-1px);
+}
 
-        /* --- MEJORA: LOGROS A LA PAR DE LAS CURVAS --- */
-        .roadmap {
-            max-width: 900px; 
-            width: 100%; 
-            padding: 3rem 0;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+.btn-logout {
+    background: #FFFFFF;
+    color: #e74c3c;
+    border: 2px solid #e74c3c;
+    margin-top: 1rem;
+    padding: clamp(8px, 1.5vw, 9px);
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 700;
+    width: 100%;
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    transition: all 0.2s ease;
+}
 
-        /* Línea de fondo curvada */
-        .roadmap::before {
-            content: ''; 
-            position: absolute; 
-            top: 0; 
-            bottom: 0; 
-            left: 0; 
-            right: 0;
-            width: 100%; 
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' preserveAspectRatio='none'%3E%3Cpath d='M 400,0 Q 150,150 400,300 T 400,600' fill='none' stroke='%233498db' stroke-width='6' stroke-dasharray='10 10'/%3E%3C/svg%3E");
-            background-size: 100% 600px; 
-            background-repeat: repeat-y; 
-            z-index: 0; 
-            opacity: 0.8;
-        }
+.btn-logout:hover {
+    background: #e74c3c;
+    color: white;
+}
 
-        /* Contenedor de cada ítem ocupa todo el ancho y distribuye a la par de la curva */
-        .achievement-item { 
-            position: relative; 
-            width: 100%; 
-            margin-bottom: 3rem; 
-            z-index: 1; 
-            display: flex;
-        }
+.btn-small {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    margin: 3px;
+    width: auto;
+    display: inline-block;
+}
 
-        /* A la par izquierda de la curva central */
-        .achievement-item.left { 
-            justify-content: flex-start;
-            padding-left: 6%;
-        }
+/* ADMIN */
+#admin-screen {
+    background: linear-gradient(145deg, #00B2A9, #63001F);
+    color: #fff;
+    padding: clamp(1.5rem, 3vh, 3rem) clamp(1rem, 3vw, 1.5rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow-y: auto;
+}
 
-        /* A la par derecha de la curva central */
-        .achievement-item.right { 
-            justify-content: flex-end;
-            padding-right: 6%;
-        }
+#admin-screen h1 {
+    font-family: 'Amatic SC', cursive;
+    font-size: clamp(2rem, 6vw, 2.8rem);
+    letter-spacing: 1px;
+    margin-bottom: clamp(1rem, 2vh, 1.5rem);
+    animation: slideUpIn 0.6s ease;
+    text-align: center;
+}
 
-        /* Forzamos un tamaño fijo equilibrado a los lados de la curva central */
-        .achievement-card {
-            background: #F9B4DA; 
-            padding: 1.5rem; 
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15); 
-            transition: transform 0.3s ease; 
-            width: 290px; 
-            word-wrap: break-word;
-        }
+.admin-container {
+    max-width: 1200px;
+    width: 100%;
+    background: rgba(255,255,255,0.98);
+    color: var(--color-texto);
+    padding: clamp(1rem, 3vw, 2rem);
+    border-radius: 22px;
+    box-shadow: var(--shadow-suave);
+    backdrop-filter: blur(10px);
+    animation: slideUpIn 0.6s ease 0.1s backwards;
+    max-height: 85vh;
+    overflow-y: auto;
+}
 
-        .achievement-card:hover { transform: scale(1.05); }
-        .date { font-size: 0.85rem; color: #fff; font-weight: bold; margin-bottom: 0.5rem; display: block; opacity: 0.9; }
-        .achievement-card h3 { color: #fff; margin-bottom: 0.5rem; font-size: 1.2rem; }
-        .achievement-card p { font-size: 0.9rem; color: #ffe3e3; line-height: 1.4; margin-bottom: 0.8rem; }
-        
-        .points-badge { display: inline-block; background: #2ecc71; color: white; padding: 0.2rem 0.6rem; font-size: 0.8rem; font-weight: bold; border-radius: 4px; }
-        
-        .achievement-item.not-completed .achievement-card { background: #b2bec3; }
-        .achievement-item.not-completed .points-badge { background: #7f8c8d; color: #fff; }
-        .achievement-item.not-completed .achievement-card p { color: #dfdfdf; }
+.admin-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1rem, 3vh, 2rem);
+}
 
-        /* Tarjeta final con el número de cliente */
-        .client-badge-card {
-            background: #2c3e50 !important;
-            border: 3px solid #34495e;
-        }
-        .client-badge-card h3, 
-        .client-badge-card p, 
-        .client-badge-card .date,
-        .client-badge-card span { 
-            color: #ffffff !important; 
-        }
-        .client-badge-card p { 
-            font-weight: bold; 
-            opacity: 0.95;
-        }
+@media (min-width: 1000px) {
+    .admin-layout {
+        grid-template-columns: 2fr 1fr;
+    }
+}
 
-        /* Diseño responsivo para pantallas móviles pequeñas */
-        @media (max-width: 768px) {
-            .roadmap::before { 
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 600' preserveAspectRatio='none'%3E%3Cpath d='M 20,0 Q 40,150 20,300 T 20,600' fill='none' stroke='%233498db' stroke-width='4' stroke-dasharray='5 5'/%3E%3C/svg%3E");
-                left: 20px; right: auto; width: 40px;
-            }
-            .achievement-item { width: 100% !important; left: 0 !important; padding-left: 60px !important; padding-right: 0 !important; justify-content: flex-start !important; }
-            .achievement-card { width: 100%; }
-        }
-    </style>
+.admin-box {
+    background: rgba(249,251,252,0.98);
+    padding: clamp(1rem, 2vw, 1.4rem) clamp(1rem, 2vw, 1.5rem);
+    border-radius: var(--radius-base);
+    margin-bottom: clamp(0.8rem, 1.5vh, 1.3rem);
+    border-left: 5px solid var(--color-acento-amarillo);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+    backdrop-filter: blur(5px);
+    animation: slideUpIn 0.6s ease backwards;
+}
+
+.admin-box:nth-child(1) { animation-delay: 0.2s; }
+.admin-box:nth-child(2) { animation-delay: 0.3s; }
+.admin-box:nth-child(3) { animation-delay: 0.4s; }
+
+.admin-box.users-box {
+    border-left-color: var(--color-secundario);
+}
+
+.admin-box h3 {
+    margin-bottom: clamp(0.6rem, 1.5vh, 0.9rem);
+    color: var(--color-vino);
+    font-weight: 700;
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+}
+
+.admin-box h4 {
+    color: var(--color-vino);
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.admin-info-card {
+    background: rgba(229,247,245,0.95);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border: 1px dashed var(--color-primario);
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    backdrop-filter: blur(5px);
+}
+
+.admin-mission-row,
+.admin-reward-row {
+    background: rgba(255,255,255,0.98);
+    padding: 12px 12px 14px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    border: 1px solid #E1E4EA;
+    position: relative;
+    animation: slideUpIn 0.4s ease backwards;
+}
+
+.admin-mission-row h4,
+.admin-reward-row h4 {
+    color: var(--color-vino);
+    margin-bottom: 8px;
+    padding-right: 120px;
+    font-size: clamp(0.9rem, 1.8vw, 0.98rem);
+    font-weight: 700;
+}
+
+.admin-mission-row label,
+.admin-reward-row label {
+    font-size: clamp(0.75rem, 1.3vw, 0.78rem);
+    font-weight: 700;
+    display: block;
+    margin-top: 6px;
+    margin-bottom: 2px;
+    color: #555;
+}
+
+.btn-delete-mission,
+.btn-delete-reward {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    font-size: clamp(0.65rem, 1.2vw, 0.75rem);
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    padding: 8px 16px;
+    background: #f0f0f0;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+    background: var(--color-primario);
+    color: white;
+    border-color: var(--color-vino);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: slideUpIn 0.3s ease;
+}
+
+.tab-btn.codes-tab {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+.tab-btn.codes-tab.active {
+    background: #c0392b;
+}
+
+.code-item-box {
+    background: #f8f9fa;
+    border: 2px solid #e74c3c;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.code-header h5 {
+    color: var(--color-vino);
+    font-weight: bold;
+    margin: 0;
+}
+
+.code-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.code-status.pending {
+    background: #f39c12;
+    color: white;
+}
+
+.code-status.used {
+    background: #27ae60;
+    color: white;
+}
+
+.code-info {
+    background: white;
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+}
+
+.code-info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.code-info-label {
+    font-weight: bold;
+    color: #555;
+}
+
+.code-info-value {
+    color: #333;
+    font-family: monospace;
+}
+
+.code-text-display {
+    background: #ecf0f1;
+    border: 2px dashed var(--color-primario);
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--color-vino);
+    margin-bottom: 0.8rem;
+    word-break: break-all;
+}
+
+.btn-use-code {
+    background: #27ae60;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.btn-use-code:hover:not(:disabled) {
+    background: #229954;
+    transform: translateY(-2px);
+}
+
+.btn-use-code:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+}
+
+.copy-code-btn {
+    background: var(--color-primario);
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+    margin-right: 0.5rem;
+}
+
+.copy-code-btn:hover {
+    background: #009d99;
+}
+
+.user-row {
+    background: rgba(255,255,255,0.98);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid #E1E4EA;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.user-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+.user-info h5 {
+    color: var(--color-vino);
+    margin: 0 0 0.3rem 0;
+    font-weight: 700;
+}
+
+.user-info p {
+    color: #666;
+    margin: 0.2rem 0;
+    font-size: 0.9rem;
+}
+
+.btn-delete-user {
+    background: #e74c3c;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.btn-delete-user:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+/* Camino */
+#roadmap-screen {
+    background: linear-gradient(-45deg, #F9E9A9 0%, #91E2D6 35%, #00B2A9 70%, #F9B4DA 100%);
+    background-size: 400% 400%;
+    position: relative;
+    overflow-x: hidden;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(1rem, 2vh, 2rem) clamp(0.8rem, 3vw, 1.4rem);
+    animation: gradientShift 15s ease infinite;
+    min-height: 100vh;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.roadmap-logo {
+    position: absolute;
+    top: clamp(12px, 2vh, 18px);
+    left: clamp(12px, 2vw, 18px);
+    width: clamp(50px, 10vw, 78px);
+    height: clamp(50px, 10vw, 78px);
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--color-blanco);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.22);
+    z-index: 5;
+    animation: slideInLeft 0.5s ease;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.roadmap-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: clamp(8px, 1.5vw, 12px);
+    position: relative;
+    z-index: 5;
+    margin-bottom: clamp(1rem, 2vh, 1.5rem);
+    padding-left: clamp(65px, 18vw, 95px);
+    animation: slideInRight 0.5s ease;
+    flex-wrap: wrap;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.roadmap-user-name,
+.earned-trophies,
+.rewards-btn {
+    background: rgba(255,255,255,0.95);
+    color: var(--color-vino);
+    padding: clamp(6px, 1.5vw, 9px) clamp(10px, 2vw, 16px);
+    border-radius: 999px;
+    font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+    font-weight: 800;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.14);
+    backdrop-filter: blur(10px);
+}
+
+.roadmap-user-name {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.roadmap-user-name small {
+    font-size: clamp(0.6rem, 1.3vw, 0.72rem);
+    opacity: 0.75;
+}
+
+.earned-trophies {
+    display: flex;
+    align-items: center;
+    gap: clamp(4px, 1vw, 6px);
+    min-height: 42px;
+    max-width: 60%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.earned-trophy {
+    display: inline-flex;
+    width: clamp(24px, 5vw, 30px);
+    height: clamp(24px, 5vw, 30px);
+    align-items: center;
+    justify-content: center;
+    background: var(--color-acento-rosa);
+    border-radius: 50%;
+    box-shadow: 0 4px 0 rgba(249,180,218,0.9);
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    animation: popIn 0.4s ease;
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    60% {
+        transform: scale(1.15);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.earned-zero {
+    font-size: clamp(0.7rem, 1.5vw, 0.82rem);
+    font-weight: 800;
+    color: var(--color-vino);
+}
+
+.rewards-btn {
+    background: linear-gradient(135deg, var(--color-acento-amarillo), #ffeaa3);
+    color: var(--color-vino);
+    border: none;
+    cursor: pointer;
+    font-weight: 800;
+    transition: all 0.2s ease;
+    padding: clamp(8px, 1.5vw, 11px) clamp(12px, 2vw, 18px);
+}
+
+.rewards-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+}
+
+.rewards-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Barra de progreso */
+.progress-bar-container {
+    width: 100%;
+    max-width: clamp(250px, 85vw, 430px);
+    height: 8px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 999px;
+    margin-bottom: clamp(0.8rem, 1.5vh, 1rem);
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 2;
+    position: relative;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primario), var(--color-secundario));
+    border-radius: 999px;
+    width: 0%;
+    transition: width 0.8s ease;
+    box-shadow: 0 0 10px rgba(0,178,169,0.5);
+}
+
+.progress-text {
+    text-align: center;
+    color: rgba(99,0,31,0.8);
+    font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+    font-weight: 700;
+    margin-bottom: clamp(0.3rem, 1vh, 0.5rem);
+    z-index: 2;
+    position: relative;
+}
+
+.roadmap {
+    max-width: clamp(280px, 90vw, 430px);
+    width: 100%;
+    min-height: clamp(400px, 80vh, 720px);
+    padding: clamp(1.5rem, 3vh, 2rem) 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2rem, 4vh, 3.2rem);
+    position: relative;
+    z-index: 2;
+}
+
+.path-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.path-line-shadow {
+    fill: none;
+    stroke: rgba(99,0,31,0.15);
+    stroke-width: 16;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.path-line {
+    fill: none;
+    stroke: #FFFFFF;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.path-line-progress {
+    fill: none;
+    stroke: var(--color-acento-amarillo);
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 4px 0 rgba(0,0,0,0.12));
+}
+
+/* LOGROS */
+.achievement-item {
+    position: relative;
+    width: 100%;
+    display: flex;
+    z-index: 2;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.achievement-item:nth-child(1) { animation-delay: 0.1s; }
+.achievement-item:nth-child(2) { animation-delay: 0.2s; }
+.achievement-item:nth-child(3) { animation-delay: 0.3s; }
+.achievement-item:nth-child(4) { animation-delay: 0.4s; }
+.achievement-item:nth-child(5) { animation-delay: 0.5s; }
+
+.achievement-item.left {
+    justify-content: flex-start;
+    padding-left: clamp(8px, 5vw, 8%);
+}
+
+.achievement-item.right {
+    justify-content: flex-end;
+    padding-right: clamp(8px, 5vw, 8%);
+}
+
+.achievement-circle {
+    position: relative;
+    width: clamp(80px, 20vw, 118px);
+    height: clamp(80px, 20vw, 118px);
+    border-radius: 50%;
+    background: var(--color-acento-rosa);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 
+        0 clamp(6px, 1.5vw, 12px) 0 rgba(249,180,218,0.95),
+        0 clamp(10px, 2.5vw, 18px) clamp(15px, 3vh, 24px) rgba(0,0,0,0.22),
+        inset 0 -4px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.achievement-circle::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255,255,255,0.4) 50%,
+        transparent 70%
+    );
+    border-radius: 50%;
+    transform: rotate(45deg);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.achievement-circle:hover {
+    transform: translateY(-8px) scale(1.08);
+    box-shadow: 
+        0 clamp(8px, 2vw, 18px) 0 rgba(249,180,218,0.95),
+        0 clamp(15px, 3vh, 28px) clamp(20px, 4vh, 32px) rgba(0,0,0,0.28),
+        inset 0 -4px 8px rgba(0,0,0,0.1);
+}
+
+.achievement-circle:active {
+    transform: translateY(-2px) scale(1.04);
+}
+
+.achievement-circle:hover::after {
+    animation: shine 0.6s ease;
+}
+
+@keyframes shine {
+    0% {
+        opacity: 0;
+        transform: rotate(45deg) translateX(-100%);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate(45deg) translateX(100%);
+    }
+}
+
+.achievement-circle::before {
+    content: '';
+    position: absolute;
+    width: clamp(55px, 14vw, 90px);
+    height: clamp(55px, 14vw, 90px);
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-acento-amarillo) 0%, #ffeaa3 100%);
+    border: clamp(4px, 1vw, 6px) solid #ffffff;
+    box-shadow:
+        inset 0 -6px 0 rgba(150,120,30,0.18),
+        inset 0 5px 0 rgba(255,255,255,0.45),
+        0 0 0 2px rgba(0,178,169,0.2);
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+.achievement-circle:hover::before {
+    border-color: var(--color-primario);
+    box-shadow:
+        inset 0 -6px 0 rgba(150,120,30,0.18),
+        inset 0 5px 0 rgba(255,255,255,0.45),
+        0 0 0 4px rgba(0,178,169,0.3);
+}
+
+.achievement-icon {
+    position: relative;
+    z-index: 2;
+    color: var(--color-vino);
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    line-height: 1;
+    text-shadow: 0 3px 0 rgba(255,255,255,0.8);
+    transition: all 0.3s ease;
+    transform-origin: center;
+}
+
+.achievement-circle:hover .achievement-icon {
+    transform: scale(1.15) rotate(8deg);
+}
+
+.achievement-circle:not(.not-completed):hover .achievement-icon {
+    animation: iconBounce 0.6s ease infinite;
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: scale(1.15) rotate(8deg) translateY(0); }
+    50% { transform: scale(1.15) rotate(8deg) translateY(-6px); }
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 99;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.show {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.achievement-detail-card {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(85vw, 95%, 420px);
+    background: rgba(255,255,255,0.98);
+    color: var(--color-texto);
+    padding: clamp(1.2rem, 4vw, 2rem);
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--color-acento-amarillo);
+    animation: popInScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.achievement-detail-card.show {
+    display: block;
+}
+
+@keyframes popInScale {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.7);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.detail-card-header {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.8rem, 2vw, 1.5rem);
+    margin-bottom: clamp(1rem, 2vh, 1.5rem);
+    padding-bottom: clamp(0.8rem, 1.5vh, 1rem);
+    border-bottom: 2px solid var(--color-acento-amarillo);
+}
+
+.detail-card-icon {
+    width: clamp(60px, 15vw, 80px);
+    height: clamp(60px, 15vw, 80px);
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-acento-amarillo) 0%, #ffeaa3 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+}
+
+.detail-card-title {
+    flex: 1;
+}
+
+.detail-card-title h3 {
+    font-size: clamp(1.3rem, 4vw, 1.6rem);
+    color: var(--color-vino);
+    font-weight: 800;
+    margin-bottom: clamp(0.2rem, 0.5vh, 0.3rem);
+    font-family: 'Amatic SC', cursive;
+}
+
+.detail-card-tag {
+    font-size: clamp(0.65rem, 1.3vw, 0.8rem);
+    color: #999;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.detail-card-body {
+    margin-bottom: clamp(1rem, 2vh, 1.5rem);
+}
+
+.detail-card-description {
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: clamp(0.8rem, 1.5vh, 1rem);
+}
+
+.detail-card-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(0.8rem, 1.5vw, 1rem);
+    background: rgba(0,178,169,0.1);
+    border-radius: 12px;
+    margin-bottom: clamp(0.8rem, 1.5vh, 1rem);
+}
+
+.detail-card-status-label {
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    font-weight: 700;
+    color: #666;
+}
+
+.detail-card-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: clamp(0.4rem, 1vw, 0.6rem) clamp(0.8rem, 1.5vw, 1.2rem);
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+}
+
+.detail-card-status-badge.completed {
+    background: #2ecc71;
+    color: white;
+}
+
+.detail-card-status-badge.pending {
+    background: #f39c12;
+    color: white;
+}
+
+.detail-card-points {
+    display: flex;
+    justify-content: center;
+    padding: clamp(0.8rem, 1.5vw, 1.2rem);
+    background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+    border-radius: 12px;
+    margin-bottom: clamp(1rem, 2vh, 1.5rem);
+}
+
+.detail-card-points-text {
+    color: white;
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    font-weight: 700;
+}
+
+.detail-card-points-value {
+    color: var(--color-acento-amarillo);
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 800;
+    margin-left: 0.5rem;
+}
+
+.detail-card-footer {
+    display: flex;
+    gap: clamp(0.5rem, 1.5vw, 1rem);
+}
+
+.detail-card-close-btn {
+    flex: 1;
+    padding: clamp(0.6rem, 1.5vw, 0.8rem);
+    background: #f0f0f0;
+    color: var(--color-vino);
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    transition: all 0.2s ease;
+}
+
+.detail-card-close-btn:hover {
+    background: #e0e0e0;
+    transform: translateY(-2px);
+}
+
+.achievement-item.not-completed .achievement-circle {
+    background: linear-gradient(135deg, #DDE3E8, #E8ECEF);
+    box-shadow: 
+        0 clamp(6px, 1.5vw, 12px) 0 #BDC5CD,
+        0 clamp(10px, 2.5vw, 18px) clamp(15px, 3vh, 24px) rgba(0,0,0,0.12),
+        inset 0 -4px 8px rgba(0,0,0,0.08);
+    filter: saturate(0.7);
+}
+
+.achievement-item.not-completed .achievement-circle::before {
+    background: linear-gradient(135deg, #ced6dd, #d8dfe7);
+    opacity: 0.8;
+}
+
+.achievement-item.not-completed .achievement-icon {
+    opacity: 0.58;
+    filter: grayscale(100%);
+}
+
+.achievement-item.not-completed .achievement-circle:hover {
+    transform: translateY(-8px) scale(1.08);
+    box-shadow: 
+        0 clamp(8px, 2vw, 18px) 0 #BDC5CD,
+        0 clamp(15px, 3vh, 28px) clamp(20px, 4vh, 32px) rgba(0,0,0,0.18),
+        inset 0 -4px 8px rgba(0,0,0,0.08);
+}
+
+/* RUNNER */
+.runner {
+    position: absolute;
+    width: clamp(50px, 12vw, 80px);
+    height: clamp(50px, 12vw, 80px);
+    z-index: 4;
+    transform: translate(-50%, -98%);
+    pointer-events: none;
+    filter: drop-shadow(0 10px 8px rgba(0,0,0,0.25));
+}
+
+.runner-avatar-circle {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #FFFFFF;
+    box-shadow: 0 8px 0 rgba(0,0,0,0.18), 0 14px 24px rgba(0,0,0,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: clamp(2px, 0.5vw, 3px) solid var(--color-primario);
+}
+
+.runner-avatar-emoji {
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    line-height: 1;
+}
+
+.runner-avatar-image {
+    width: 92%;
+    height: 92%;
+    object-fit: contain;
+}
+
+.runner.walking {
+    animation: runnerWalk 2.2s ease-in-out forwards;
+}
+
+.runner.walking .runner-avatar-circle {
+    animation: walkBounce 1.1s ease-in-out infinite;
+}
+
+.runner.walking .runner-avatar-emoji,
+.runner.walking .runner-avatar-image {
+    animation: emojiWalkRotate 1.1s ease-in-out infinite;
+}
+
+.runner.jump {
+    animation: runnerJump 1.2s ease;
+}
+
+.runner.jump .runner-avatar-circle {
+    animation: runnerJump 1.2s ease;
+}
+
+@keyframes runnerWalk {
+    0% {
+        left: var(--start-x);
+        top: var(--start-y);
+    }
+    100% {
+        left: var(--end-x);
+        top: var(--end-y);
+    }
+}
+
+@keyframes walkBounce {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    25% {
+        transform: translateY(-8px);
+    }
+    50% {
+        transform: translateY(0px);
+    }
+    75% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes emojiWalkRotate {
+    0%, 100% {
+        transform: scaleX(1) rotate(0deg);
+    }
+    25% {
+        transform: scaleX(1) rotate(-3deg);
+    }
+    50% {
+        transform: scaleX(1) rotate(0deg);
+    }
+    75% {
+        transform: scaleX(1) rotate(3deg);
+    }
+}
+
+@keyframes runnerJump {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-50px);
+    }
+}
+
+.confetti-piece {
+    position: fixed;
+    width: 9px;
+    height: 14px;
+    z-index: 9998;
+    pointer-events: none;
+    border-radius: 2px;
+    animation: confettiFall 1.2s ease-out forwards;
+}
+
+@keyframes confettiFall {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) rotate(540deg) scale(0.8);
+    }
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 9000;
+    animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--color-blanco);
+    border-radius: 20px;
+    padding: clamp(1.2rem, 3vw, 2rem);
+    max-width: 500px;
+    width: 90%;
+    margin: auto;
+    box-shadow: var(--shadow-suave);
+    animation: slideUpIn 0.4s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.modal-title {
+    font-family: 'Amatic SC', cursive;
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    color: var(--color-vino);
+    margin-bottom: clamp(0.8rem, 1.5vh, 1rem);
+    text-align: center;
+}
+
+.reward-card {
+    background: rgba(249,251,252,0.98);
+    border: 2px solid var(--color-acento-amarillo);
+    border-radius: 15px;
+    padding: clamp(0.8rem, 2vw, 1.2rem);
+    margin-bottom: clamp(0.6rem, 1vh, 1rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    gap: clamp(0.8rem, 1.5vw, 1rem);
+    flex-wrap: wrap;
+}
+
+.reward-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+}
+
+.reward-card.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.reward-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+.reward-info h4 {
+    color: var(--color-vino);
+    margin-bottom: clamp(0.2rem, 0.5vh, 0.4rem);
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+}
+
+.reward-info p {
+    color: #666;
+    font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+    margin-bottom: clamp(0.2rem, 0.5vh, 0.4rem);
+}
+
+.reward-cost {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-weight: bold;
+    color: var(--color-primario);
+}
+
+.reward-cost small {
+    font-size: clamp(0.6rem, 1.2vw, 0.7rem);
+    opacity: 0.7;
+}
+
+.btn-redeem {
+    background: linear-gradient(135deg, var(--color-acento-amarillo), #ffeaa3);
+    color: var(--color-vino);
+    border: none;
+    padding: clamp(6px, 1vw, 8px) clamp(10px, 1.5vw, 16px);
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    white-space: nowrap;
+}
+
+.btn-redeem:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+.btn-redeem:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.redemption-history {
+    margin-top: clamp(1rem, 2vh, 1.5rem);
+    padding-top: clamp(1rem, 1.5vh, 1.5rem);
+    border-top: 2px solid #E1E4EA;
+}
+
+.redemption-history h4 {
+    color: var(--color-vino);
+    margin-bottom: clamp(0.5rem, 1vh, 0.8rem);
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+}
+
+.history-item {
+    background: #F0F8F7;
+    padding: clamp(0.6rem, 1.5vw, 10px) clamp(0.8rem, 1.5vw, 12px);
+    border-radius: 8px;
+    margin-bottom: clamp(0.4rem, 0.8vh, 8px);
+    font-size: clamp(0.8rem, 1.5vw, 0.85rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: clamp(0.5rem, 1vw, 0.8rem);
+}
+
+.history-item.used {
+    background: #e8f8f5;
+    opacity: 0.7;
+}
+
+.history-date {
+    color: #999;
+    font-size: clamp(0.65rem, 1.2vw, 0.75rem);
+}
+
+.history-code {
+    background: var(--color-acento-amarillo);
+    padding: clamp(3px, 0.8vw, 4px) clamp(6px, 1vw, 8px);
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    color: var(--color-vino);
+    white-space: nowrap;
+}
+
+.history-code.used {
+    background: #27ae60;
+    color: white;
+}
+
+code {
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+.btn-save-changes {
+    background: #2ecc71;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.btn-save-changes:hover {
+    background: #27ae60;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 480px) {
+    .roadmap-header {
+        padding-left: clamp(55px, 16vw, 76px);
+        margin-bottom: 1rem;
+        row-gap: 0.5rem;
+    }
+
+    .achievement-item.left,
+    .achievement-item.right {
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+    }
+
+    .roadmap {
+        gap: clamp(1.5rem, 3vh, 2.5rem);
+    }
+
+    .user-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-delete-user {
+        width: 100%;
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <div id="login-screen" class="screen">
-        <div class="login-card">
-            <img src="helados.png" alt="Logo" class="logo-circular">
-            <h2>¡Bienvenido!</h2>
-            <p>Ingresa tus datos para ver tu progreso en el camino de logros.</p>
-            
-            <form id="login-form">
-                <input type="text" id="username-input" placeholder="Nombre y Apellido reales" pattern="[A-Za-zÁéíóúÁÉÍÓÚñÑ\s]+" minlength="3" title="Escribe solo letras y espacios" required>
-                <span class="input-help">Usa solo letras y espacios (Mínimo 3 letras)</span>
+<div id="splash-screen">
+    <img src="helados.png" alt="Logo" class="logo-splash">
+</div>
 
-                <input type="tel" id="phone-input" placeholder="Número de Teléfono (solo para clientes nuevos)" pattern="\d{7,15}" title="Escribe entre 7 y 15 números">
-                <span class="input-help">Introduce tu teléfono (ej: sólo números sin espacios)</span>
+<div id="login-screen" class="screen">
+    <div class="login-card">
+        <img src="helados.png" alt="Logo" class="logo-circular">
+        <h2>¡Bienvenido!</h2>
+        <p>Ingresa tus datos para ver tu progreso en el camino de logros.</p>
 
-                <div class="password-container">
-                    <input type="password" id="password-input" placeholder="Contraseña (mínimo 8 caracteres)" minlength="8" required>
-                    <button type="button" id="toggle-password-btn" class="toggle-password" title="Mostrar/Ocultar contraseña">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" id="eye-icon">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        </svg>
-                    </button>
-                </div>
-                <span class="input-help">Debe contener 8 o más caracteres</span>
+        <form id="login-form">
+            <input type="text" id="username-input" placeholder="Nombre y Apellido reales" minlength="3" required>
+            <span class="input-help">Usa solo letras y espacios. Mínimo 3 letras.</span>
 
-                <span id="error-box" class="error-message"></span>
-                <button type="submit" class="btn-green">Ingresar</button>
-            </form>
-        </div>
+            <input type="tel" id="phone-input" placeholder="Número de teléfono para clientes nuevos">
+            <span class="input-help">Solo números, sin espacios.</span>
+
+            <div class="password-container">
+                <input type="password" id="password-input" placeholder="Contraseña, mínimo 8 caracteres" minlength="8" required>
+                <button type="button" id="toggle-password-btn" class="toggle-password">Ver</button>
+            </div>
+
+            <span id="error-box" class="error-message"></span>
+            <button type="submit" class="btn-green">Ingresar</button>
+        </form>
     </div>
+</div>
 
-    <div id="admin-screen" class="screen hidden">
-        <h1 style="margin-bottom: 1.5rem; text-align: center;">🛠️ Panel de Control Administrador</h1>
-        <div class="admin-container">
-            <div class="admin-layout">
-                
-                <div>
+<div id="admin-screen" class="screen hidden">
+    <h1>🎨 Panel de Control Administrativo</h1>
+
+    <div class="admin-container">
+        <div class="admin-layout">
+            <div>
+                <!-- TABS -->
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="cambiarTab(event, 'usuarios')">👥 Usuarios</button>
+                    <button class="tab-btn" onclick="cambiarTab(event, 'misiones')">🎯 Misiones</button>
+                    <button class="tab-btn" onclick="cambiarTab(event, 'premios')">🎁 Premios</button>
+                    <button class="tab-btn codes-tab" onclick="cambiarTab(event, 'codigos')">🔐 Códigos</button>
+                </div>
+
+                <!-- TAB: USUARIOS -->
+                <div id="tab-usuarios" class="tab-content active">
                     <div class="admin-box">
-                        <h3>🎯 Evaluar y Editar Metas</h3>
-                        <label style="font-size:0.85rem; font-weight:bold; display:block; margin-bottom:5px;">Selecciona un usuario:</label>
-                        <select id="admin-user-selector" onchange="cargarMisionesUsuarioSeleccionado()"></select>
-                        
-                        <form id="admin-form" style="margin-top: 1.5rem;">
-                            <div id="admin-missions-inputs">
-                                <p style="color:#7f8c8d; font-style:italic;">Selecciona un usuario para calificar, editar textos o gestionarlo.</p>
-                            </div>
-                            <button type="submit" id="btn-save-admin" class="btn-blue hidden">💾 Guardar Cambios y Puntos</button>
-                        </form>
+                        <h3>👥 Gestionar Usuarios</h3>
+                        <p style="color:#666; font-size:0.9rem; margin-bottom:1rem;">
+                            Aquí puedes ver todos los usuarios registrados. Al eliminar un usuario, su número de cliente quedará disponible para reutilizar.
+                        </p>
+                        <div id="users-list-container">
+                            <p style="color:#7f8c8d; font-style:italic; text-align:center;">
+                                Cargando usuarios...
+                            </p>
+                        </div>
                     </div>
                 </div>
-                
-                <div>
-                    <div id="admin-creation-box" class="admin-box users-box hidden">
-                        <h3>✨ Crear Nueva Misión / Logro</h3>
-                        <p style="font-size: 0.85rem; color:#666; margin-bottom: 10px;">Agrega una meta personalizada ilimitada al usuario seleccionado actual.</p>
-                        
-                        <label style="font-size:0.8rem; font-weight:bold;">Título del nuevo logro:</label>
-                        <input type="text" id="new-mission-title" placeholder="Ej: Compra de Oro">
-                        
-                        <label style="font-size:0.8rem; font-weight:bold;">Descripción:</label>
-                        <textarea id="new-mission-desc" rows="2" placeholder="Ej: Completó 5 pedidos en el mes..."></textarea>
-                        
-                        <label style="font-size:0.8rem; font-weight:bold;">Puntos iniciales:</label>
+
+                <!-- TAB: MISIONES -->
+                <div id="tab-misiones" class="tab-content">
+                    <div class="admin-box">
+                        <h3>🎯 Crear Nueva Misión</h3>
+
+                        <label style="font-size:clamp(0.8rem, 1.5vw, 0.85rem); font-weight:bold;">Selecciona usuario:</label>
+                        <select id="mision-user-selector">
+                            <option value="">-- Selecciona usuario --</option>
+                        </select>
+
+                        <label style="font-size:clamp(0.8rem, 1.5vw, 0.85rem); font-weight:bold; margin-top:0.8rem;">Título:</label>
+                        <input type="text" id="new-mission-title" placeholder="Ej: Amante del Chocolate">
+
+                        <label style="font-size:clamp(0.8rem, 1.5vw, 0.85rem); font-weight:bold;">Descripción:</label>
+                        <textarea id="new-mission-desc" rows="2" placeholder="Ej: Probaste 5 sabores diferentes"></textarea>
+
+                        <label style="font-size:clamp(0.8rem, 1.5vw, 0.85rem); font-weight:bold;">Puntos:</label>
                         <input type="number" id="new-mission-points" value="50" min="0">
-                        
-                        <button type="button" class="btn-blue" style="background:#2ecc71; margin-top:5px;" onclick="agregarNuevaMisionAdmin()">➕ Agregar esta meta</button>
+
+                        <label style="font-size:clamp(0.8rem, 1.5vw, 0.85rem); font-weight:bold;">Logo:</label>
+                        <select id="new-mission-logo">
+                            <option value="🍦">🍦 Helado</option>
+                            <option value="🍨">🍨 Helado Sándwich</option>
+                            <option value="🎂">🎂 Torta</option>
+                            <option value="🍫">🍫 Chocolate</option>
+                            <option value="🌟">🌟 Estrella</option>
+                            <option value="👑">👑 Corona</option>
+                        </select>
+
+                        <button type="button" class="btn-blue" onclick="agregarNuevaMisionAdmin()">
+                            ➕ Agregar Misión
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TAB: PREMIOS -->
+                <div id="tab-premios" class="tab-content">
+                    <div class="admin-box">
+                        <h3>🎁 Gestionar Premios</h3>
+
+                        <label style="font-size:clamp(0.8rem, 1.5vw, 0.85rem); font-weight:bold;">Nombre del premio:</label>
+                        <input type="text" id="new-reward-name" placeholder="Ej: Helado Gratis">
+
+                        <label style="font-size:clamp(0.8rem, 1.5vw, 0.85rem); font-weight:bold;">Descripción:</label>
+                        <textarea id="new-reward-desc" rows="2" placeholder="Ej: Un helado de cualquier sabor"></textarea>
+
+                        <label style="font-size:clamp(0.8rem, 1.5vw, 0.85rem); font-weight:bold;">Puntos requeridos:</label>
+                        <input type="number" id="new-reward-points" value="100" min="1">
+
+                        <button type="button" class="btn-blue" onclick="agregarNuevoPremioAdmin()">
+                            ➕ Agregar Premio
+                        </button>
+
+                        <h4 style="margin-top:1.5rem;">Premios Actuales:</h4>
+                        <div id="admin-rewards-list"></div>
+                    </div>
+                </div>
+
+                <!-- TAB: CÓDIGOS DE CANJE -->
+                <div id="tab-codigos" class="tab-content">
+                    <div class="admin-box">
+                        <h3>🔐 Códigos de Canje</h3>
+
+                        <p style="color:#666; font-size:0.9rem; margin-bottom:1rem;">
+                            Los códigos se generan automáticamente cuando un cliente canjea un premio. 
+                            Una vez que marques un código como utilizado, el cliente NO podrá reclamarlo nuevamente.
+                        </p>
+
+                        <div id="codes-list-container">
+                            <p style="color:#7f8c8d; font-style:italic; text-align:center;">
+                                Cargando códigos...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="admin-box" style="border-left-color: var(--color-acento-rosa);">
+                    <h3>🔐 Credenciales</h3>
+                    <div class="admin-info-card">
+                        <p><strong>Usuario:</strong> <code>admin</code></p>
+                        <p><strong>Contraseña:</strong> <code>admin12345</code></p>
                     </div>
 
-                    <div class="admin-box users-box">
-                        <h3>👥 Información del Sistema</h3>
-                        <p style="font-size: 0.95rem; color:#333;">Las tarjetas se mantendrán perfectamente distribuidas a los costados de la línea curva de manera alterna.</p>
+                    <h4>⚙️ Estadísticas</h4>
+                    <div class="admin-info-card">
+                        <p><strong>Total Usuarios:</strong> <span id="stat-users">0</span></p>
+                        <p><strong>Total Misiones:</strong> <span id="stat-missions">0</span></p>
+                        <p><strong>Total Premios:</strong> <span id="stat-rewards">0</span></p>
+                        <p><strong>Códigos Pendientes:</strong> <span id="stat-pending-codes">0</span></p>
+                        <p><strong>Códigos Utilizados:</strong> <span id="stat-used-codes">0</span></p>
+                        <p><strong>Próximo Número Cliente:</strong> <span id="next-client-number">1</span></p>
                     </div>
-                    <button class="btn-logout" onclick="cerrarSesionAdmin()">Volver al Login</button>
+
+                    <button class="btn-logout" onclick="cerrarSesionAdmin()">🚪 Cerrar Sesión</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div id="roadmap-screen" class="screen hidden">
-        <div class="floating-container" id="lluvia-contenedor"></div>
+<div id="roadmap-screen" class="screen hidden">
+    <img src="helados.png" alt="Logo" class="roadmap-logo">
 
-        <h1 id="user-welcome">Mi Camino de Éxitos</h1>
-        <div class="score-board">
-            🏆 Puntos Obtenidos: <span id="total-score">0</span> PTS
+    <div class="roadmap-header">
+        <div class="roadmap-user-name">
+            <span id="user-welcome">Usuario ✨</span>
+            <small id="client-number">Cliente #0</small>
         </div>
 
-        <div class="roadmap" id="roadmap-container"></div>
-        <button class="btn-logout btn-logout-roadmap" onclick="location.reload()" style="max-width:200px; margin-top: 2rem; margin-left:auto; margin-right:auto; display:block;">Cerrar Sesión</button>
+        <div class="earned-trophies" id="earned-trophies">
+            <span class="earned-zero" id="points-counter">0 puntos</span>
+        </div>
+
+        <button class="rewards-btn" id="rewards-btn" onclick="abrirModalPremios()">🎁 Mis Premios</button>
     </div>
 
-    <script type="module">
+    <div class="progress-text" id="progress-text">0% completado</div>
+    <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progress-bar-fill"></div>
+    </div>
+
+    <div class="roadmap" id="roadmap-container">
+        <svg class="path-svg" id="path-svg">
+            <path id="path-shadow" class="path-line-shadow"></path>
+            <path id="path-line" class="path-line"></path>
+            <path id="path-progress" class="path-line-progress"></path>
+        </svg>
+
+        <div class="runner" id="runner">
+            <div class="runner-avatar-circle">
+                <span class="runner-avatar-emoji" id="runner-emoji">🍦</span>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-logout btn-logout-roadmap" onclick="location.reload()" style="max-width:clamp(150px, 60vw, 200px); margin-top: clamp(1rem, 2vh, 2rem); position: relative; z-index: 2; padding: clamp(8px, 1.5vw, 12px);">
+        Cerrar Sesión
+    </button>
+</div>
+
+<!-- TARJETA DE DETALLE DE MISIÓN -->
+<div class="modal-overlay" id="mission-modal-overlay"></div>
+<div class="achievement-detail-card" id="achievement-detail-card"></div>
+
+<!-- MODAL DE PREMIOS -->
+<div id="rewards-modal" class="modal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="cerrarModalPremios()">✕</button>
+        <h2 class="modal-title">🎁 Mis Premios</h2>
         
+        <div id="next-reward-info"></div>
+        <div id="rewards-list"></div>
+        <div id="redemptions-history"></div>
+    </div>
+</div>
+
+<script>
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        const splash = document.getElementById('splash-screen');
+        splash.style.opacity = '0';
+        splash.style.visibility = 'hidden';
+    }, 2300);
+});
+
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'admin12345';
+
+const palabrasProhibidas = ['tonto', 'bobo', 'estupido', 'mierda', 'pendejo', 'puto', 'perra'];
+
+const misionesPlantilla = [
+    { 
+        id: Date.now() + 1, 
+        posicion: 'left', 
+        logo: '🍦', 
+        tag: 'Misión 1', 
+        titulo: 'Mi Primer Helado', 
+        desc: 'Realizaste tu primer compra y disfrutaste de un delicioso helado artesanal.', 
+        puntos: 10, 
+        cumplida: true 
+    },
+    { 
+        id: Date.now() + 2, 
+        posicion: 'right', 
+        logo: '🍨', 
+        tag: 'Misión 2', 
+        titulo: 'Amante de los Sabores', 
+        desc: 'Probaste 3 sabores diferentes en nuestros helados premium.', 
+        puntos: 30, 
+        cumplida: false 
+    },
+    { 
+        id: Date.now() + 3, 
+        posicion: 'left', 
+        logo: '🍫', 
+        tag: 'Misión 3', 
+        titulo: 'Especialista en Chocolate', 
+        desc: 'Completaste la colección de todos nuestros sabores de chocolate.', 
+        puntos: 50, 
+        cumplida: false 
+    },
+    { 
+        id: Date.now() + 4, 
+        posicion: 'right', 
+        logo: '🎂', 
+        tag: 'Misión 4', 
+        titulo: 'Celebrador de Momentos', 
+        desc: 'Pediste una torta de helado para un evento especial.', 
+        puntos: 100, 
+        cumplida: false 
+    },
+    { 
+        id: Date.now() + 5, 
+        posicion: 'left', 
+        logo: '👑', 
+        tag: 'Meta Final', 
+        titulo: 'Cliente VIP Heladería', 
+        desc: 'Acumulaste 200 puntos y te convertiste en cliente Premium.', 
+        puntos: 200, 
+        cumplida: false 
+    }
+];
+
+const premiosPlantilla = [
+    { id: 1, nombre: '🍦 Helado Gratis', desc: 'Un helado de cualquier sabor', puntos: 100 },
+    { id: 2, nombre: '🍨 Sándwich de Helado', desc: 'Sándwich con 2 sabores diferentes', puntos: 150 },
+    { id: 3, nombre: '🎂 Torta de Helado Pequeña', desc: 'Torta de helado para llevar', puntos: 200 },
+    { id: 4, nombre: '🍫 Pack Chocolate Premium', desc: 'Variedad de helados de chocolate', puntos: 300 }
+];
+
+let DB_USUARIOS = JSON.parse(localStorage.getItem('db_usuarios_misiones')) || {};
+let DB_PREMIOS = JSON.parse(localStorage.getItem('db_premios')) || JSON.parse(JSON.stringify(premiosPlantilla));
+let DB_CODIGOS = JSON.parse(localStorage.getItem('db_codigos_canje')) || {};
+let CLIENT_COUNTER = parseInt(localStorage.getItem('db_client_counter')) || 0;
+let NUMEROS_DISPONIBLES = JSON.parse(localStorage.getItem('db_numeros_disponibles')) || [];
+let usuarioActivo = '';
+let confetiMostrado = false;
+let usuarioEditando = '';
+
+let avatarConfig = JSON.parse(localStorage.getItem('db_avatar_config')) || {
+    emoji: '🍦',
+    imageUrl: ''
+};
+
+const loginForm = document.getElementById('login-form');
+const usernameInput = document.getElementById('username-input');
+const phoneInput = document.getElementById('phone-input');
+const passwordInput = document.getElementById('password-input');
+const errorBox = document.getElementById('error-box');
+const togglePasswordBtn = document.getElementById('toggle-password-btn');
+const misionUserSelector = document.getElementById('mision-user-selector');
+
+function cambiarTab(event, tabName) {
+    event.preventDefault();
+    
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    document.getElementById('tab-' + tabName).classList.add('active');
+    event.target.classList.add('active');
+
+    if (tabName === 'codigos') {
+        actualizarListaCodigosAdmin();
+    }
+
+    if (tabName === 'usuarios') {
+        actualizarListaUsuariosAdmin();
+    }
+}
+
+function mostrarDetalleMision(mision, index) {
+    const detailCard = document.getElementById('achievement-detail-card');
+    const overlay = document.getElementById('mission-modal-overlay');
+
+    const estadoHTML = mision.cumplida 
+        ? '<span class="detail-card-status-badge completed">✓ Completada</span>'
+        : '<span class="detail-card-status-badge pending">⏳ Pendiente</span>';
+
+    const puntosHTML = '<div class="detail-card-points"><span class="detail-card-points-text">Puntos</span><span class="detail-card-points-value">' + mision.puntos + '</span></div>';
+
+    detailCard.innerHTML = '<div class="detail-card-header"><div class="detail-card-icon">' + mision.logo + '</div><div class="detail-card-title"><h3>' + mision.titulo + '</h3><div class="detail-card-tag">' + mision.tag + '</div></div></div><div class="detail-card-body"><p class="detail-card-description">' + mision.desc + '</p><div class="detail-card-status"><span class="detail-card-status-label">Estado</span>' + estadoHTML + '</div>' + puntosHTML + '</div><div class="detail-card-footer"><button class="detail-card-close-btn" onclick="cerrarDetalleMision()">Cerrar</button></div>';
+
+    detailCard.classList.add('show');
+    overlay.classList.add('show');
+}
+
+function cerrarDetalleMision() {
+    const detailCard = document.getElementById('achievement-detail-card');
+    const overlay = document.getElementById('mission-modal-overlay');
+    
+    detailCard.classList.remove('show');
+    overlay.classList.remove('show');
+}
+
+document.getElementById('mission-modal-overlay').addEventListener('click', cerrarDetalleMision);
+
+function aplicarConfiguracionAvatarEnRunner() {
+    const runnerEmojiSpan = document.getElementById('runner-emoji');
+    const circle = document.querySelector('.runner-avatar-circle');
+
+    const imgExistente = circle.querySelector('.runner-avatar-image');
+    if (imgExistente) imgExistente.remove();
+
+    if (avatarConfig.imageUrl && avatarConfig.imageUrl.trim() !== '') {
+        runnerEmojiSpan.style.display = 'none';
+        const img = document.createElement('img');
+        img.src = avatarConfig.imageUrl.trim();
+        img.alt = 'Avatar';
+        img.className = 'runner-avatar-image';
+        circle.appendChild(img);
+    } else {
+        runnerEmojiSpan.textContent = avatarConfig.emoji || '🍦';
+        runnerEmojiSpan.style.display = 'block';
+    }
+}
+
+aplicarConfiguracionAvatarEnRunner();
+
+usernameInput.addEventListener('input', function() {
+    this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');
+    errorBox.innerText = '';
+});
+
+phoneInput.addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '');
+    errorBox.innerText = '';
+});
+
+togglePasswordBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+    togglePasswordBtn.innerText = passwordInput.type === 'password' ? 'Ver' : 'Ocultar';
+});
+
+function animarNumero(elemento, valorFinal, duracion) {
+    duracion = duracion || 1500;
+    let inicio = 0;
+    let tiempoInicio = null;
+
+    function paso(tiempoActual) {
+        if (!tiempoInicio) tiempoInicio = tiempoActual;
+        const progreso = (tiempoActual - tiempoInicio) / duracion;
+
+        if (progreso < 1) {
+            const valorActual = Math.floor(inicio + (valorFinal - inicio) * progreso);
+            elemento.textContent = valorActual + ' puntos';
+            requestAnimationFrame(paso);
+        } else {
+            elemento.textContent = valorFinal + ' puntos';
+        }
+    }
+
+    requestAnimationFrame(paso);
+}
+
+function abrirModalPremios() {
+    const modal = document.getElementById('rewards-modal');
+    modal.classList.add('show');
+
+    if (usuarioActivo) {
+        const usuario = DB_USUARIOS[usuarioActivo];
+        const puntosActuales = obtenerPuntosUsuario(usuario.misiones);
+
+        mostrarPremios(puntosActuales);
+        mostrarHistorialCanjes(usuario);
+    }
+}
+
+function cerrarModalPremios() {
+    const modal = document.getElementById('rewards-modal');
+    modal.classList.remove('show');
+}
+
+function mostrarPremios(puntosActuales) {
+    const listaPremios = document.getElementById('rewards-list');
+    const proximoPremio = document.getElementById('next-reward-info');
+    
+    listaPremios.innerHTML = '<h3 style="color:#63001F; margin-bottom:1rem;">Premios Disponibles</h3>';
+    
+    let proximoEncontrado = false;
+
+    DB_PREMIOS.forEach(function(premio) {
+        const tieneEnPuntos = puntosActuales >= premio.puntos;
+        const faltanPuntos = Math.max(0, premio.puntos - puntosActuales);
+
+        const card = document.createElement('div');
+        card.className = 'reward-card' + (tieneEnPuntos ? '' : ' disabled');
+
+        card.innerHTML = '<div class="reward-info"><h4>' + premio.nombre + '</h4><p>' + premio.desc + '</p><div class="reward-cost">' + premio.puntos + '<small> pts</small></div></div><button class="btn-redeem"' + (tieneEnPuntos ? '' : ' disabled') + ' onclick="canjearPremio(' + premio.id + ')">' + (tieneEnPuntos ? 'Canjear' : 'Faltan ' + faltanPuntos) + '</button>';
+
+        listaPremios.appendChild(card);
+
+        if (!proximoEncontrado && !tieneEnPuntos) {
+            proximoPremio.innerHTML = '<div style="background: rgba(0,178,169,0.15); border: 2px solid #00B2A9; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; text-align: center;"><p style="color: #00B2A9; font-weight: bold;">Próximo Premio:</p><h3 style="color: #63001F; margin: 0.5rem 0;">' + premio.nombre + '</h3><p style="font-size: 0.9rem; margin-bottom: 0.5rem; color: #666;">' + premio.desc + '</p><div style="font-size: 1.2rem; color: #00B2A9; font-weight: bold;">Te faltan <span style="color: #F9E9A9;">' + faltanPuntos + '</span> puntos</div></div>';
+            proximoEncontrado = true;
+        }
+    });
+
+    if (!proximoEncontrado && DB_PREMIOS.length > 0) {
+        proximoPremio.innerHTML = '<div style="background: rgba(0,178,169,0.15); border: 2px solid #00B2A9; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; text-align: center;"><p style="color: #00B2A9; font-weight: bold; font-size: 1.2rem;">🎉 ¡Felicidades!</p><p style="color: #63001F; font-weight: bold;">Ya tienes acceso a todos los premios</p></div>';
+    }
+}
+
+function generarCodigoUnico() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let codigo = 'CAN-';
+    for (let i = 0; i < 8; i++) {
+        codigo += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return codigo;
+}
+
+function canjearPremio(premioId) {
+    if (!usuarioActivo) return;
+
+    const usuario = DB_USUARIOS[usuarioActivo];
+    const puntosActuales = obtenerPuntosUsuario(usuario.misiones);
+    const premio = DB_PREMIOS.find(function(p) { return p.id === premioId; });
+
+    if (!premio || puntosActuales < premio.puntos) {
+        alert('No tienes suficientes puntos para este premio.');
+        return;
+    }
+
+    const codigoCanye = generarCodigoUnico();
+
+    if (!usuario.canjes) usuario.canjes = [];
+    usuario.canjes.push({
+        premioId: premioId,
+        premioNombre: premio.nombre,
+        puntos: premio.puntos,
+        fecha: new Date().toLocaleString('es-ES'),
+        codigo: codigoCanye,
+        usado: false,
+        fechaUso: null
+    });
+
+    usuario.puntosCanjeados = (usuario.puntosCanjeados || 0) + premio.puntos;
+
+    if (!DB_CODIGOS[codigoCanye]) {
+        DB_CODIGOS[codigoCanye] = {
+            codigo: codigoCanye,
+            cliente: usuarioActivo,
+            clienteNumero: usuario.numeroCliente,
+            premio: premio.nombre,
+            puntos: premio.puntos,
+            fechaGenerado: new Date().toLocaleString('es-ES'),
+            usado: false,
+            fechaUso: null
+        };
+    }
+
+    localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS));
+    localStorage.setItem('db_codigos_canje', JSON.stringify(DB_CODIGOS));
+
+    alert('¡Felicidades!\n\nPremio: ' + premio.nombre + '\n\nCódigo de canje:\n' + codigoCanye + '\n\nGuarda este código y preséntalo en la heladería para reclamar tu premio.');
+    
+    abrirModalPremios();
+}
+
+function mostrarHistorialCanjes(usuario) {
+    const historial = document.getElementById('redemptions-history');
+    
+    if (!usuario.canjes || usuario.canjes.length === 0) {
+        historial.innerHTML = '';
+        return;
+    }
+
+    historial.innerHTML = '<div class="redemption-history"><h4>Tus Canjes</h4></div>';
+    const contenedor = historial.querySelector('.redemption-history');
+
+    usuario.canjes.forEach(function(canje) {
+        const item = document.createElement('div');
+        item.className = 'history-item' + (canje.usado ? ' used' : '');
+        item.innerHTML = '<div><strong>' + canje.premioNombre + '</strong><br><span class="history-date">' + canje.fecha + '</span>' + (canje.usado ? '<br><span class="history-date">Utilizado: ' + canje.fechaUso + '</span>' : '') + '</div><span class="history-code' + (canje.usado ? ' used' : '') + '">' + canje.codigo + (canje.usado ? ' ✓' : '') + '</span>';
+        contenedor.appendChild(item);
+    });
+}
+
+function agregarNuevoPremioAdmin() {
+    const nombre = document.getElementById('new-reward-name').value.trim();
+    const desc = document.getElementById('new-reward-desc').value.trim();
+    const puntos = parseInt(document.getElementById('new-reward-points').value) || 0;
+
+    if (!nombre || !desc || puntos < 1) {
+        alert('Por favor completa todos los campos del premio.');
+        return;
+    }
+
+    const nuevoId = Math.max.apply(null, DB_PREMIOS.map(function(p) { return p.id; })) + 1;
+
+    DB_PREMIOS.push({
+        id: nuevoId,
+        nombre: nombre,
+        desc: desc,
+        puntos: puntos
+    });
+
+    localStorage.setItem('db_premios', JSON.stringify(DB_PREMIOS));
+
+    document.getElementById('new-reward-name').value = '';
+    document.getElementById('new-reward-desc').value = '';
+    document.getElementById('new-reward-points').value = '100';
+
+    alert('✅ Premio agregado correctamente.');
+    cargarListaPremiosAdmin();
+    actualizarEstadisticas();
+}
+
+function eliminarPremioAdmin(premioId) {
+    if (confirm('¿Seguro que deseas eliminar este premio?')) {
+        DB_PREMIOS = DB_PREMIOS.filter(function(p) { return p.id !== premioId; });
+        localStorage.setItem('db_premios', JSON.stringify(DB_PREMIOS));
+        cargarListaPremiosAdmin();
+        actualizarEstadisticas();
+    }
+}
+
+function cargarListaPremiosAdmin() {
+    const lista = document.getElementById('admin-rewards-list');
+    lista.innerHTML = '';
+
+    DB_PREMIOS.forEach(function(premio) {
+        const row = document.createElement('div');
+        row.className = 'admin-reward-row';
+        row.innerHTML = '<h4>' + premio.nombre + '</h4><button type="button" class="btn-red btn-delete-mission" onclick="eliminarPremioAdmin(' + premio.id + ')">🗑️ Eliminar</button><label>Descripción:</label><p style="margin:0; color:#666;">' + premio.desc + '</p><label style="margin-top:0.5rem;">Puntos requeridos:</label><p style="margin:0; font-weight:bold; color:#00B2A9;">' + premio.puntos + ' pts</p>';
+        lista.appendChild(row);
+    });
+}
+
+function copiarAlPortapapeles(texto) {
+    navigator.clipboard.writeText(texto).then(function() {
+        alert('✅ Código copiado al portapapeles');
+    });
+}
+
+function marcarCodigoComoUsado(codigo) {
+    if (!DB_CODIGOS[codigo]) return;
+
+    if (confirm('¿Marcar el código ' + codigo + ' como utilizado?')) {
+        DB_CODIGOS[codigo].usado = true;
+        DB_CODIGOS[codigo].fechaUso = new Date().toLocaleString('es-ES');
         
-        const ADMIN_USER = "admin";
-        const ADMIN_PASS = "12345678"; 
+        const codigoData = DB_CODIGOS[codigo];
+        const usuario = DB_USUARIOS[codigoData.cliente];
+        if (usuario && usuario.canjes) {
+            const canje = usuario.canjes.find(function(c) { return c.codigo === codigo; });
+            if (canje) {
+                canje.usado = true;
+                canje.fechaUso = codigoData.fechaUso;
+            }
+        }
+        
+        localStorage.setItem('db_codigos_canje', JSON.stringify(DB_CODIGOS));
+        localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS));
+        actualizarListaCodigosAdmin();
+        actualizarEstadisticas();
+        alert('✅ Código marcado como utilizado. El cliente NO podrá reclamarlo nuevamente.');
+    }
+}
 
-        const palabrasProhibidas = ["tonto", "bobo", "estupido", "mierda", "pendejo", "puto", "perra"];
+function actualizarListaCodigosAdmin() {
+    const contenedor = document.getElementById('codes-list-container');
+    const codigosArray = Object.values(DB_CODIGOS);
+    const codigosPendientes = codigosArray.filter(function(c) { return !c.usado; });
 
-        const misionesPlantilla = [
-            { id: Date.now() + 1, posicion: 'left', tag: 'Misión 1', titulo: 'Registro Exitoso', desc: 'Has configurado tu cuenta y asegurado tu acceso al mapa de misiones.', puntos: 10, cumplida: true },
-            { id: Date.now() + 2, posicion: 'right', tag: 'Misión 2', titulo: 'El Inicio del Viaje', desc: 'Tomé la decisión de aprender una nueva habilidad y creé mi primer "Hola Mundo".', puntos: 30, cumplida: false },
-            { id: Date.now() + 3, posicion: 'left', tag: 'Misión 3', titulo: 'Primer Proyecto', desc: 'Diseñé y programé mi primera página web completa desde cero usando HTML y CSS.', puntos: 50, cumplida: false },
-            { id: Date.now() + 4, posicion: 'right', tag: 'Misión 4', titulo: 'Certificación Oficial', desc: 'Aprobé con éxito el curso avanzado y obtuve mi diploma de especialización.', puntos: 100, cumplida: false },
-            { id: Date.now() + 5, posicion: 'left', tag: 'Meta Final', titulo: 'Próxima Meta Grande', desc: 'Dominar tecnologías de backend y lanzar una aplicación web funcional.', puntos: 200, cumplida: false }
-        ];
+    if (codigosArray.length === 0) {
+        contenedor.innerHTML = '<p style="color:#7f8c8d; font-style:italic; text-align:center;">No hay códigos generados</p>';
+        return;
+    }
 
-        let DB_USUARIOS = JSON.parse(localStorage.getItem('db_usuarios_misiones')) || {};
-        let CLIENT_COUNTER = parseInt(localStorage.getItem('db_client_counter')) || 0;
+    contenedor.innerHTML = '';
 
-        const loginForm = document.getElementById('login-form');
-        const usernameInput = document.getElementById('username-input');
-        const phoneInput = document.getElementById('phone-input');
-        const passwordInput = document.getElementById('password-input');
-        const errorBox = document.getElementById('error-box');
-        const togglePasswordBtn = document.getElementById('toggle-password-btn');
-        const eyeIcon = document.getElementById('eye-icon');
-        const userSelector = document.getElementById('admin-user-selector');
-        const missionsInputsContainer = document.getElementById('admin-missions-inputs');
-        const btnSaveAdmin = document.getElementById('btn-save-admin');
-        const adminCreationBox = document.getElementById('admin-creation-box');
+    codigosPendientes.forEach(function(codigo) {
+        const codeBox = document.createElement('div');
+        codeBox.className = 'code-item-box';
+        codeBox.innerHTML = '<div class="code-header"><h5>' + codigo.premio + '</h5><span class="code-status pending">⏳ PENDIENTE</span></div><div class="code-info"><div class="code-info-row"><span class="code-info-label">Cliente:</span><span class="code-info-value">' + codigo.cliente + ' (#' + codigo.clienteNumero + ')</span></div><div class="code-info-row"><span class="code-info-label">Puntos:</span><span class="code-info-value">' + codigo.puntos + '</span></div><div class="code-info-row"><span class="code-info-label">Fecha:</span><span class="code-info-value">' + codigo.fechaGenerado + '</span></div></div><div class="code-text-display">' + codigo.codigo + '</div><div style="display: flex; gap: 0.5rem;"><button class="copy-code-btn" onclick="copiarAlPortapapeles(\'' + codigo.codigo + '\')">📋 Copiar</button><button class="btn-use-code" onclick="marcarCodigoComoUsado(\'' + codigo.codigo + '\')">✅ Marcar como Usado</button></div>';
+        contenedor.appendChild(codeBox);
+    });
 
-        usernameInput.addEventListener('input', function() {
-            this.value = this.value.replace(/[^A-Za-zÁéíóúÁÉÍÓÚñÑ\s]/g, '');
-            errorBox.innerText = ""; 
+    const codigosUsados = codigosArray.filter(function(c) { return c.usado; });
+    if (codigosUsados.length > 0) {
+        const titulo = document.createElement('h4');
+        titulo.style.color = 'var(--color-vino)';
+        titulo.style.marginTop = '2rem';
+        titulo.style.marginBottom = '1rem';
+        titulo.innerHTML = '✅ Códigos Utilizados';
+        contenedor.appendChild(titulo);
+
+        codigosUsados.forEach(function(codigo) {
+            const codeBox = document.createElement('div');
+            codeBox.className = 'code-item-box';
+            codeBox.style.opacity = '0.7';
+            codeBox.innerHTML = '<div class="code-header"><h5>' + codigo.premio + '</h5><span class="code-status used">✓ UTILIZADO</span></div><div class="code-info"><div class="code-info-row"><span class="code-info-label">Cliente:</span><span class="code-info-value">' + codigo.cliente + ' (#' + codigo.clienteNumero + ')</span></div><div class="code-info-row"><span class="code-info-label">Fecha Canje:</span><span class="code-info-value">' + codigo.fechaGenerado + '</span></div><div class="code-info-row"><span class="code-info-label">Fecha Uso:</span><span class="code-info-value">' + codigo.fechaUso + '</span></div></div><div class="code-text-display">' + codigo.codigo + '</div>';
+            contenedor.appendChild(codeBox);
         });
-        phoneInput.addEventListener('input', function() {
-            this.value = this.value.replace(/\D/g, ''); 
-            errorBox.innerText = ""; 
-        });
+    }
+}
 
-        togglePasswordBtn.addEventListener('click', function() {
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.815 7.815 3 3m-3-3-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />`;
-            } else {
-                passwordInput.type = 'password';
-                eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />`;
-            }
-        });
+function actualizarListaUsuariosAdmin() {
+    const contenedor = document.getElementById('users-list-container');
+    const usuariosArray = Object.entries(DB_USUARIOS);
 
-        loginForm.addEventListener('submit', function(evento) {
-            evento.preventDefault();
-            
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value.trim();
-            const phone = phoneInput.value.trim();
-            errorBox.innerText = "";
+    if (usuariosArray.length === 0) {
+        contenedor.innerHTML = '<p style="color:#7f8c8d; font-style:italic; text-align:center;">No hay usuarios registrados</p>';
+        return;
+    }
 
-            if (username === ADMIN_USER && password === ADMIN_PASS) {
-                DB_USUARIOS = JSON.parse(localStorage.getItem('db_usuarios_misiones')) || {};
-                poblarSelectorUsuariosAdmin();
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('admin-screen').classList.remove('hidden');
-                return;
-            }
+    contenedor.innerHTML = '';
 
-            const userLower = username.toLowerCase();
-            const passLower = password.toLowerCase();
-            if (palabrasProhibidas.some(p => userLower.includes(p)) || palabrasProhibidas.some(p => passLower.includes(p))) {
-                errorBox.innerText = "❌ Se detectó lenguaje inapropiado.";
-                return;
-            }
+    usuariosArray.sort(function(a, b) { return a[1].numeroCliente - b[1].numeroCliente; }).forEach(function(entry) {
+        const username = entry[0];
+        const usuario = entry[1];
+        
+        const userRow = document.createElement('div');
+        userRow.className = 'user-row';
+        
+        const misionesCumplidas = usuario.misiones.filter(function(m) { return m.cumplida; }).length;
+        const puntos = obtenerPuntosUsuario(usuario.misiones);
 
-            const userKey = username;
+        userRow.innerHTML = '<div class="user-info"><h5>👤 ' + username + ' (Cliente #' + usuario.numeroCliente + ')</h5><p>📱 Teléfono: ' + usuario.telefono + '</p><p>🎯 Misiones: ' + misionesCumplidas + '/' + usuario.misiones.length + ' completadas</p><p>⭐ Puntos: ' + puntos + '</p><p>🎁 Canjes: ' + (usuario.canjes || []).length + '</p></div><button class="btn-delete-user" onclick="eliminarUsuarioAdmin(\'' + username + '\')">🗑️ Eliminar Cliente</button>';
+        contenedor.appendChild(userRow);
+    });
+}
 
-            if (DB_USUARIOS[userKey]) {
-                if (DB_USUARIOS[userKey].contrasena !== password) {
-                    errorBox.innerText = "❌ Contraseña incorrecta para este usuario.";
-                    return;
-                }
-            } else {
-                if(phone.length < 7) {
-                    errorBox.innerText = "❌ Para registrarte como cliente nuevo, introduce tu número de teléfono.";
-                    return;
-                }
+function eliminarUsuarioAdmin(username) {
+    if (confirm('¿Estás seguro que deseas eliminar al usuario "' + username + '"?\n\nSu número de cliente (#' + DB_USUARIOS[username].numeroCliente + ') volverá a estar disponible.')) {
+        const numeroCliente = DB_USUARIOS[username].numeroCliente;
+        
+        if (!NUMEROS_DISPONIBLES.includes(numeroCliente)) {
+            NUMEROS_DISPONIBLES.push(numeroCliente);
+            NUMEROS_DISPONIBLES.sort(function(a, b) { return a - b; });
+        }
+        
+        delete DB_USUARIOS[username];
+        
+        localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS));
+        localStorage.setItem('db_numeros_disponibles', JSON.stringify(NUMEROS_DISPONIBLES));
+        
+        actualizarListaUsuariosAdmin();
+        actualizarEstadisticas();
+        poblarSelectorUsuariosParaMisiones();
+        alert('✅ Usuario eliminado. El número de cliente #' + numeroCliente + ' está nuevamente disponible.');
+    }
+}
 
-                let telefonoDuplicado = Object.values(DB_USUARIOS).some(u => u.telefono === phone);
-                if (telefonoDuplicado) {
-                    errorBox.innerText = "❌ Este número de teléfono ya está registrado por otro usuario.";
-                    return;
-                }
+function poblarSelectorUsuariosParaMisiones() {
+    misionUserSelector.innerHTML = '<option value="">-- Selecciona usuario --</option>';
 
-                CLIENT_COUNTER++;
-                localStorage.setItem('db_client_counter', CLIENT_COUNTER);
+    const llavesUsuarios = Object.keys(DB_USUARIOS);
+    
+    llavesUsuarios.sort(function(a, b) { return DB_USUARIOS[a].numeroCliente - DB_USUARIOS[b].numeroCliente; });
 
-                DB_USUARIOS[userKey] = {
-                    numeroCliente: CLIENT_COUNTER,
-                    telefono: phone,
-                    contrasena: password, 
-                    misiones: JSON.parse(JSON.stringify(misionesPlantilla))
-                };
-                localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS));
-            }
+    llavesUsuarios.forEach(function(key) {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.innerText = '[Cliente #' + DB_USUARIOS[key].numeroCliente + '] ' + key;
+        misionUserSelector.appendChild(opt);
+    });
+}
 
-            document.getElementById('user-welcome').innerText = `¡Bienvenido, ${username}! ✨`;
-            generarMapaUsuario(userKey);
-            iniciarLluviaDosImagenes(); 
+function obtenerPuntosUsuario(misiones) {
+    return misiones
+        .filter(function(m) { return m.cumplida; })
+        .reduce(function(total, m) { return total + (parseInt(m.puntos) || 0); }, 0);
+}
 
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('roadmap-screen').classList.remove('hidden');
-            window.scrollTo(0, 0);
-        });
+function obtenerProximoNumeroCliente() {
+    if (NUMEROS_DISPONIBLES.length > 0) {
+        const numero = NUMEROS_DISPONIBLES.shift();
+        localStorage.setItem('db_numeros_disponibles', JSON.stringify(NUMEROS_DISPONIBLES));
+        return numero;
+    }
+    
+    CLIENT_COUNTER++;
+    localStorage.setItem('db_client_counter', CLIENT_COUNTER);
+    return CLIENT_COUNTER;
+}
 
-        function iniciarLluviaDosImagenes() {
-            const contenedor = document.getElementById('lluvia-contenedor');
-            contenedor.innerHTML = ""; 
-            const imagenesDisponibles = ['señor.png', 'helados.png'];
-            for (let i = 0; i < 14; i++) {
-                const elemento = document.createElement('div');
-                elemento.className = 'floating-element';
-                elemento.style.backgroundImage = `url('${imagenesDisponibles[Math.floor(Math.random() * 2)]}')`;
-                elemento.style.left = `${Math.random() * 95}%`;
-                const tamano = Math.floor(Math.random() * 40) + 45;
-                elemento.style.width = `${tamano}px`; elemento.style.height = `${tamano}px`;
-                elemento.style.animationDuration = `${Math.floor(Math.random() * 13) + 15}s`;
-                elemento.style.animationDelay = `${Math.floor(Math.random() * 12)}s`;
-                contenedor.appendChild(elemento);
-            }
+loginForm.addEventListener('submit', function(evento) {
+    evento.preventDefault();
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+    const phone = phoneInput.value.trim();
+    errorBox.innerText = '';
+
+    if (username === ADMIN_USER && password === ADMIN_PASS) {
+        DB_USUARIOS = JSON.parse(localStorage.getItem('db_usuarios_misiones')) || {};
+        DB_PREMIOS = JSON.parse(localStorage.getItem('db_premios')) || DB_PREMIOS;
+        DB_CODIGOS = JSON.parse(localStorage.getItem('db_codigos_canje')) || {};
+        NUMEROS_DISPONIBLES = JSON.parse(localStorage.getItem('db_numeros_disponibles')) || [];
+        poblarSelectorUsuariosParaMisiones();
+        cargarListaPremiosAdmin();
+        actualizarListaUsuariosAdmin();
+        actualizarEstadisticas();
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('admin-screen').classList.remove('hidden');
+        return;
+    }
+
+    const userLower = username.toLowerCase();
+    const passLower = password.toLowerCase();
+
+    if (palabrasProhibidas.some(function(p) { return userLower.includes(p); }) || palabrasProhibidas.some(function(p) { return passLower.includes(p); })) {
+        errorBox.innerText = 'Se detectó lenguaje inapropiado.';
+        return;
+    }
+
+    const userKey = username;
+
+    if (DB_USUARIOS[userKey]) {
+        if (DB_USUARIOS[userKey].contrasena !== password) {
+            errorBox.innerText = 'Contraseña incorrecta para este usuario.';
+            return;
+        }
+    } else {
+        if (phone.length < 7) {
+            errorBox.innerText = 'Para registrarte como cliente nuevo, introduce tu número de teléfono.';
+            return;
         }
 
-        function generarMapaUsuario(userKey) {
-            const container = document.getElementById('roadmap-container');
-            container.innerHTML = "";
-            let totalPuntos = 0;
-            
-            const datosUsuario = DB_USUARIOS[userKey];
-            const misionesUsuario = datosUsuario.misiones;
-            const numCliente = datosUsuario.numeroCliente;
+        const telefonoDuplicado = Object.values(DB_USUARIOS).some(function(u) { return u.telefono === phone; });
 
-            misionesUsuario.forEach(m => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = `achievement-item ${m.posicion} ${m.cumplida ? '' : 'not-completed'}`;
-                itemDiv.innerHTML = `
-                    <div class="achievement-card">
-                        <span class="date">${m.tag}</span>
-                        <h3>${m.titulo}</h3>
-                        <p>${m.desc}</p>
-                        <span class="points-badge">${m.cumplida ? '✅ Cumplida (+' + m.puntos + ' pts)' : '⏳ No cumplida (0 pts)'}</span>
-                    </div>
-                `;
-                container.appendChild(itemDiv);
-                if (m.cumplida) totalPuntos += parseInt(m.puntos);
-            });
-
-            // TARJETA DE AGRADECIMIENTO AL FINAL (FIJA A LA DERECHA)
-            const finalDiv = document.createElement('div');
-            finalDiv.className = `achievement-item right`;
-            finalDiv.innerHTML = `
-                <div class="achievement-card client-badge-card">
-                    <span class="date">🎉 ¡Eres Especial!</span>
-                    <h3>Miembro Oficial</h3>
-                    <p>Eres nuestro Cliente Especial #${numCliente}</p>
-                    <span class="points-badge" style="background:#e74c3c; border: 1px solid #fff;">¡Gracias por tu preferencia!</span>
-                </div>
-            `;
-            container.appendChild(finalDiv);
-
-            document.getElementById('total-score').innerText = totalPuntos;
+        if (telefonoDuplicado) {
+            errorBox.innerText = 'Este número de teléfono ya está registrado por otro usuario.';
+            return;
         }
 
-        // --- PANEL DE CONTROL ---
+        const numeroCliente = obtenerProximoNumeroCliente();
 
-        function poblarSelectorUsuariosAdmin() {
-            userSelector.innerHTML = '<option value="">-- Selecciona un Cliente por Número o Nombre --</option>';
-            const llavesUsuarios = Object.keys(DB_USUARIOS);
-            
-            if (llavesUsuarios.length === 0) {
-                missionsInputsContainer.innerHTML = '<p style="color:#7f8c8d; font-style:italic;">No hay usuarios registrados en el sistema todavía.</p>';
-                btnSaveAdmin.classList.add('hidden');
-                adminCreationBox.classList.add('hidden');
-                return;
-            }
+        DB_USUARIOS[userKey] = {
+            numeroCliente: numeroCliente,
+            telefono: phone,
+            contrasena: password,
+            misiones: JSON.parse(JSON.stringify(misionesPlantilla)),
+            canjes: [],
+            puntosCanjeados: 0
+        };
 
-            llavesUsuarios.sort((a, b) => DB_USUARIOS[a].numeroCliente - DB_USUARIOS[b].numeroCliente);
+        localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS));
+    }
 
-            llavesUsuarios.forEach(key => {
-                const numCliente = DB_USUARIOS[key].numeroCliente;
-                const opt = document.createElement('option');
-                opt.value = key; 
-                opt.innerText = `[Cliente #${numCliente}] ${key}`; 
-                userSelector.appendChild(opt);
-            });
-        }
+    usuarioActivo = userKey;
+    confetiMostrado = false;
 
-        function cargarMisionesUsuarioSeleccionado() {
-            const userKeySeleccionado = userSelector.value;
-            missionsInputsContainer.innerHTML = "";
+    document.getElementById('user-welcome').innerText = username + ' ✨';
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('roadmap-screen').classList.remove('hidden');
 
-            if (!userKeySeleccionado) {
-                missionsInputsContainer.innerHTML = '<p style="color:#7f8c8d; font-style:italic;">Selecciona un usuario para calificar sus metas o gestionarlo.</p>';
-                btnSaveAdmin.classList.add('hidden');
-                adminCreationBox.classList.add('hidden');
-                return;
-            }
+    generarMapaUsuario(userKey);
+    window.scrollTo(0, 0);
+});
 
-            btnSaveAdmin.classList.remove('hidden');
-            adminCreationBox.classList.remove('hidden');
-            
-            const datosUsuario = DB_USUARIOS[userKeySeleccionado];
-            const misionesUsuario = datosUsuario.misiones;
-            const telefonoUsuario = datosUsuario.telefono || "No registrado";
-            const numCliente = datosUsuario.numeroCliente;
+function actualizarTrofeosGanados(misionesUsuario) {
+    const contenedorTrofeos = document.getElementById('earned-trophies');
+    const contadorPuntos = document.getElementById('points-counter');
+    const misionesCumplidas = misionesUsuario.filter(function(m) { return m.cumplida; });
+    const puntosGanados = misionesCumplidas.reduce(function(total, m) { return total + (parseInt(m.puntos) || 0); }, 0);
 
-            const infoCard = document.createElement('div');
-            infoCard.className = 'admin-info-card';
-            infoCard.innerHTML = `
-                <p><strong>👤 Cliente:</strong> ${userKeySeleccionado} (🔢 Identificador Fijo: #${numCliente})</p>
-                <p><strong>📞 Teléfono:</strong> <span style="color:#2980b9; font-weight:bold;">${telefonoUsuario}</span></p>
-                <button type="button" class="btn-red" style="margin-top:8px;" onclick="eliminarCuentaUsuario('${userKeySeleccionado}')">❌ Eliminar Cuenta del Cliente</button>
-            `;
-            missionsInputsContainer.appendChild(infoCard);
+    if (misionesCumplidas.length === 0) {
+        contenedorTrofeos.innerHTML = '<span class="earned-zero" id="points-counter">0 puntos</span>';
+        return;
+    }
 
-            if(misionesUsuario.length === 0) {
-                const aviso = document.createElement('p');
-                aviso.style = "color:#7f8c8d; font-style:italic; padding: 10px;";
-                aviso.innerText = "Este usuario no tiene misiones activas en este momento. ¡Puedes crearle una nueva a la derecha!";
-                missionsInputsContainer.appendChild(aviso);
-                return;
-            }
+    animarNumero(contadorPuntos, puntosGanados);
 
-            misionesUsuario.forEach((m, index) => {
-                const row = document.createElement('div');
-                row.className = 'admin-mission-row';
-                row.innerHTML = `
-                    <h4>🛠️ ${m.tag}</h4>
-                    <button type="button" class="btn-red btn-delete-mission" onclick="eliminarMisionIndividual(${index})">🗑️ Eliminar meta</button>
-                    
-                    <label>Título del Logro:</label>
-                    <input type="text" id="title-${index}" value="${m.titulo}" required>
-                    
-                    <label>Descripción:</label>
-                    <textarea id="desc-${index}" rows="2" required>${m.desc}</textarea>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        <div>
-                            <label>Puntos:</label>
-                            <input type="number" id="points-${index}" value="${m.puntos}" min="0" required>
-                        </div>
-                        <div>
-                            <label>¿Estado?</label>
-                            <select id="status-${index}">
-                                <option value="true" ${m.cumplida ? 'selected' : ''}>Sí, cumplida</option>
-                                <option value="false" ${!m.cumplida ? 'selected' : ''}>No cumplida</option>
-                            </select>
-                        </div>
-                    </div>
-                `;
-                missionsInputsContainer.appendChild(row);
-            });
-        }
+    let trofeos = '';
+    misionesCumplidas.forEach(function(m) {
+        trofeos += '<span class="earned-trophy">' + (m.logo || '🍦') + '</span>';
+    });
 
-        function agregarNuevaMisionAdmin() {
-            const userKeySeleccionado = userSelector.value;
-            if(!userKeySeleccionado) return;
+    contenedorTrofeos.innerHTML = '<span class="earned-zero" id="points-counter">' + puntosGanados + ' puntos</span>' + trofeos;
 
-            const titulo = document.getElementById('new-mission-title').value.trim();
-            const desc = document.getElementById('new-mission-desc').value.trim();
-            const puntos = parseInt(document.getElementById('new-mission-points').value) || 0;
+    const nuevoContador = document.getElementById('points-counter');
+    setTimeout(function() { animarNumero(nuevoContador, puntosGanados, 800); }, 100);
+}
 
-            if(!titulo || !desc) {
-                alert("⚠️ Por favor escribe un título y descripción para el nuevo logro.");
-                return;
-            }
+function actualizarBarraProgreso(misionesUsuario) {
+    const totalMisiones = misionesUsuario.length;
+    const misionesCumplidas = misionesUsuario.filter(function(m) { return m.cumplida; }).length;
+    const porcentaje = totalMisiones > 0 ? Math.round((misionesCumplidas / totalMisiones) * 100) : 0;
 
-            const misionesActuales = DB_USUARIOS[userKeySeleccionado].misiones;
-            const nuevoNumeroMision = misionesActuales.length + 1;
-            const esPar = nuevoNumeroMision % 2 === 0;
+    const barraFill = document.getElementById('progress-bar-fill');
+    const progresText = document.getElementById('progress-text');
 
-            const nuevaMision = {
-                id: Date.now(),
-                posicion: esPar ? 'right' : 'left',
-                tag: `Misión ${nuevoNumeroMision}`,
-                titulo: titulo,
-                desc: desc,
-                puntos: puntos,
-                cumplida: false
-            };
+    barraFill.style.width = porcentaje + '%';
+    progresText.textContent = porcentaje + '% completado';
+}
 
-            DB_USUARIOS[userKeySeleccionado].misiones.push(nuevaMision);
-            localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS));
+function generarMapaUsuario(userKey) {
+    const container = document.getElementById('roadmap-container');
+    const svg = document.getElementById('path-svg');
+    const runner = document.getElementById('runner');
 
-            document.getElementById('new-mission-title').value = "";
-            document.getElementById('new-mission-desc').value = "";
-            document.getElementById('new-mission-points').value = "50";
+    container.querySelectorAll('.achievement-item').forEach(function(item) { item.remove(); });
 
-            alert("✨ ¡Nuevo logro creado y asignado con éxito!");
-            cargarMisionesUsuarioSeleccionado();
-        }
+    const datosUsuario = DB_USUARIOS[userKey];
+    const misionesUsuario = datosUsuario.misiones;
 
-        function eliminarMisionIndividual(index) {
-            const userKeySeleccionado = userSelector.value;
-            if(!userKeySeleccionado) return;
+    document.getElementById('client-number').innerText = 'Cliente #' + datosUsuario.numeroCliente;
+    actualizarTrofeosGanados(misionesUsuario);
+    actualizarBarraProgreso(misionesUsuario);
+    aplicarConfiguracionAvatarEnRunner();
 
-            if(confirm("⚠️ ¿Seguro que deseas eliminar este logro de forma permanente?")) {
-                sincronizarDatosFormulario(userKeySeleccionado);
-                
-                DB_USUARIOS[userKeySeleccionado].misiones.splice(index, 1);
-                
-                DB_USUARIOS[userKeySeleccionado].misiones.forEach((m, idx) => {
-                    if (m.tag.startsWith("Misión")) {
-                        m.tag = `Misión ${idx + 1}`;
-                    }
-                    m.posicion = (idx + 1) % 2 === 0 ? 'right' : 'left';
-                });
+    misionesUsuario.forEach(function(m, index) {
+        m.posicion = index % 2 === 0 ? 'left' : 'right';
 
-                localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS));
-                cargarMisionesUsuarioSeleccionado();
-            }
-        }
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'achievement-item ' + m.posicion + (m.cumplida ? '' : ' not-completed');
+        itemDiv.dataset.index = index;
 
-        function sincronizarDatosFormulario(userKeySeleccionado) {
-            const misionesUsuario = DB_USUARIOS[userKeySeleccionado].misiones;
-            misionesUsuario.forEach((m, index) => {
-                const tEl = document.getElementById(`title-${index}`);
-                const dEl = document.getElementById(`desc-${index}`);
-                const pEl = document.getElementById(`points-${index}`);
-                const sEl = document.getElementById(`status-${index}`);
+        itemDiv.innerHTML = '<button class="achievement-circle" type="button" onclick="mostrarDetalleMision({logo: \'' + m.logo + '\', tag: \'' + m.tag + '\', titulo: \'' + m.titulo + '\', desc: \'' + m.desc + '\', puntos: ' + m.puntos + ', cumplida: ' + m.cumplida + '}, ' + index + ')"><span class="achievement-icon">' + (m.logo || '🍦') + '</span></button>';
 
-                if(tEl && dEl && pEl && sEl) {
-                    m.titulo = tEl.value.trim();
-                    m.desc = dEl.value.trim();
-                    m.puntos = parseInt(pEl.value) || 0;
-                    m.cumplida = (sEl.value === "true");
-                }
-            });
-        }
+        container.appendChild(itemDiv);
+    });
 
-        function eliminarCuentaUsuario(userKey) {
-            const confirmacion = confirm(`⚠️ ¿Estás completamente seguro de que quieres borrar de forma permanente la cuenta de "${userKey}"?\nEsta acción no se puede deshacer.`);
-            
-            if (confirmacion) {
-                delete DB_USUARIOS[userKey]; 
-                localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS)); 
-                alert(`📋 La cuenta de "${userKey}" ha sido eliminada del sistema.`);
-                
-                poblarSelectorUsuariosAdmin();
-                missionsInputsContainer.innerHTML = '<p style="color:#7f8c8d; font-style:italic;">Selecciona un usuario para calificar sus metas o gestionarlo.</p>';
-                btnSaveAdmin.classList.add('hidden');
-                adminCreationBox.classList.add('hidden');
-            }
-        }
+    container.appendChild(svg);
+    container.appendChild(runner);
 
-        document.getElementById('admin-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const userKeySeleccionado = userSelector.value;
-            if (!userKeySeleccionado) return;
+    setTimeout(function() {
+        dibujarCaminoYPersonaje(misionesUsuario);
+    }, 100);
+}
 
-            sincronizarDatosFormulario(userKeySeleccionado);
-            localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS));
-            
-            alert(`¡Los nombres, descripciones, puntajes y estados de "${userKeySeleccionado}" se han guardado con éxito! 🎉`);
-            cerrarSesionAdmin();
-        });
+function obtenerCentrosMisiones() {
+    const container = document.getElementById('roadmap-container');
+    const containerRect = container.getBoundingClientRect();
+    const circles = Array.from(container.querySelectorAll('.achievement-circle'));
 
-        function cerrarSesionAdmin() {
-            document.getElementById('admin-screen').classList.add('hidden');
-            document.getElementById('login-screen').classList.remove('hidden');
-            usernameInput.value = "";
-            phoneInput.value = "";
-            passwordInput.value = "";
-            missionsInputsContainer.innerHTML = '<p style="color:#7f8c8d; font-style:italic;">Selecciona un usuario para calificar sus metas o gestionarlo.</p>';
-            btnSaveAdmin.classList.add('hidden');
-            adminCreationBox.classList.add('hidden');
-        }
-    </script>
+    return circles.map(function(circle) {
+        const rect = circle.getBoundingClientRect();
+        return {
+            x: rect.left - containerRect.left + rect.width / 2,
+            y: rect.top - containerRect.top + rect.height / 2
+        };
+    });
+}
+
+function construirPath(puntos, hastaIndice) {
+    if (puntos.length === 0) return '';
+
+    const limite = typeof hastaIndice === 'number' ? Math.max(0, Math.min(hastaIndice, puntos.length - 1)) : puntos.length - 1;
+    let d = 'M ' + puntos[0].x + ' ' + puntos[0].y;
+
+    for (let i = 1; i <= limite; i++) {
+        const anterior = puntos[i - 1];
+        const actual = puntos[i];
+        const controlY = (anterior.y + actual.y) / 2;
+
+        d += ' C ' + anterior.x + ' ' + controlY + ', ' + actual.x + ' ' + controlY + ', ' + actual.x + ' ' + actual.y;
+    }
+
+    return d;
+}
+
+function dibujarCaminoYPersonaje(misionesUsuario) {
+    const puntos = obtenerCentrosMisiones();
+    if (puntos.length === 0) return;
+
+    const pathShadow = document.getElementById('path-shadow');
+    const pathLine = document.getElementById('path-line');
+    const pathProgress = document.getElementById('path-progress');
+    const runner = document.getElementById('runner');
+
+    const ultimoCumplido = misionesUsuario.reduce(function(ultimo, m, index) { return m.cumplida ? index : ultimo; }, -1);
+    const indicePersonaje = ultimoCumplido >= 0 ? ultimoCumplido : 0;
+
+    const fullPath = construirPath(puntos);
+    const progressPath = construirPath(puntos, indicePersonaje);
+
+    pathShadow.setAttribute('d', fullPath);
+    pathLine.setAttribute('d', fullPath);
+    pathProgress.setAttribute('d', progressPath);
+
+    const startX = puntos[0].x;
+    const startY = puntos[0].y;
+    const endX = puntos[indicePersonaje].x;
+    const endY = puntos[indicePersonaje].y - 8;
+
+    runner.style.setProperty('--start-x', endX + 'px');
+    runner.style.setProperty('--start-y', endY + 'px');
+    runner.style.setProperty('--end-x', endX + 'px');
+    runner.style.setProperty('--end-y', endY + 'px');
+
+    runner.classList.remove('walking', 'jump');
+    runner.style.left = endX + 'px';
+    runner.style.top = endY + 'px';
+}
+
+window.addEventListener('resize', function() {
+    if (!usuarioActivo || document.getElementById('roadmap-screen').classList.contains('hidden')) return;
+
+    const usuario = DB_USUARIOS[usuarioActivo];
+    if (usuario) {
+        dibujarCaminoYPersonaje(usuario.misiones);
+    }
+});
+
+function agregarNuevaMisionAdmin() {
+    const userKey = document.getElementById('mision-user-selector').value;
+    if (!userKey) {
+        alert('Por favor selecciona un usuario.');
+        return;
+    }
+
+    const titulo = document.getElementById('new-mission-title').value.trim();
+    const desc = document.getElementById('new-mission-desc').value.trim();
+    const puntos = parseInt(document.getElementById('new-mission-points').value) || 0;
+    const logo = document.getElementById('new-mission-logo').value;
+
+    if (!titulo || !desc) {
+        alert('Por favor completa todos los campos.');
+        return;
+    }
+
+    const misionesActuales = DB_USUARIOS[userKey].misiones;
+    const nuevoNumeroMision = misionesActuales.length + 1;
+
+    misionesActuales.push({
+        id: Date.now(),
+        posicion: nuevoNumeroMision % 2 === 0 ? 'right' : 'left',
+        logo: logo,
+        tag: 'Misión ' + nuevoNumeroMision,
+        titulo: titulo,
+        desc: desc,
+        puntos: puntos,
+        cumplida: false
+    });
+
+    localStorage.setItem('db_usuarios_misiones', JSON.stringify(DB_USUARIOS));
+
+    document.getElementById('new-mission-title').value = '';
+    document.getElementById('new-mission-desc').value = '';
+    document.getElementById('new-mission-points').value = '50';
+    document.getElementById('new-mission-logo').value = '🍦';
+    document.getElementById('mision-user-selector').value = '';
+
+    alert('✅ Misión agregada correctamente.');
+    actualizarEstadisticas();
+}
+
+function actualizarEstadisticas() {
+    const totalUsuarios = Object.keys(DB_USUARIOS).length;
+    const totalMisiones = Object.values(DB_USUARIOS).reduce(function(sum, u) { return sum + (u.misiones || []).length; }, 0);
+    const totalPremios = DB_PREMIOS.length;
+    const totalCodigosPendientes = Object.values(DB_CODIGOS).filter(function(c) { return !c.usado; }).length;
+    const totalCodigosUsados = Object.values(DB_CODIGOS).filter(function(c) { return c.usado; }).length;
+    const proximoNumero = NUMEROS_DISPONIBLES.length > 0 ? NUMEROS_DISPONIBLES[0] : (CLIENT_COUNTER + 1);
+
+    document.getElementById('stat-users').textContent = totalUsuarios;
+    document.getElementById('stat-missions').textContent = totalMisiones;
+    document.getElementById('stat-rewards').textContent = totalPremios;
+    document.getElementById('stat-pending-codes').textContent = totalCodigosPendientes;
+    document.getElementById('stat-used-codes').textContent = totalCodigosUsados;
+    document.getElementById('next-client-number').textContent = proximoNumero;
+}
+
+function cerrarSesionAdmin() {
+    document.getElementById('admin-screen').classList.add('hidden');
+    document.getElementById('login-screen').classList.remove('hidden');
+
+    usernameInput.value = '';
+    phoneInput.value = '';
+    passwordInput.value = '';
+    passwordInput.type = 'password';
+    togglePasswordBtn.innerText = 'Ver';
+    
+    document.querySelectorAll('.tab-content').forEach(function(tab) { tab.classList.remove('active'); });
+    document.getElementById('tab-usuarios').classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
+    document.querySelector('.tab-btn').classList.add('active');
+}
+
+document.getElementById('rewards-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        cerrarModalPremios();
+    }
+});
+</script>
+
 </body>
 </html>
